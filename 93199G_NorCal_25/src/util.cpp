@@ -100,7 +100,7 @@ void color_sort(std::string target){
             pros::delay(500);
         }
 
-        pros::delay(50);
+        pros::delay(52);
     }
 }
 

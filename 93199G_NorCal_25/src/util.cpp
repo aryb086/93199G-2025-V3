@@ -9,8 +9,8 @@
 
 //arm pid constants
 const double armkP = 0.5;
-const double armkI = 0;
-const double armkD = 0;
+const double armkI = 0.5;
+const double armkD = 0.5;
 
 //parameters
 const double maxVoltage = 127;

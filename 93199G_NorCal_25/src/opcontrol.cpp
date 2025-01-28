@@ -1,4 +1,5 @@
 #include "main.h"
+#include "robot.h"
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -13,5 +14,31 @@
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+bool intakeState = false;
+bool lastIntakeState = false;
+
+int ladyBrownState = 0;
+int lastLadyBrownState = 0;
+
+bool intakePistonState = false;
+bool lastIntakePistonState = false;
+
+bool doinkerState = false;
+bool lastDoinkerState = false;
+
+void intakeControl(){
+}
+
 void opcontrol() {
+    while(true){
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
+
+        chassis.tank(leftY, rightY);
+
+
+
+        pros::delay(25);
+    }
 }

@@ -322,7 +322,9 @@
         "version": "2.3.0"
       }
     },
-    "upload_options": {},
+    "upload_options": {
+      "icon": "pizza"
+    },
     "use_early_access": false
   }
 }

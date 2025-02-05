@@ -1,14 +1,8 @@
 #include "main.h"
-#include "robodash/views/selector.hpp"
+#include "liblvgl/llemu.hpp"
+#include "robot.h"
+#include "pros/misc.h"
 
-
-rd::Selector selector({
-	{"Skills", skills},
-	{"Red Positive", red_pos},
-	{"Red Negative", red_neg},
-	{"Blue Positive", blue_pos},
-	{"Blue Negative", blue_neg},
-});
 
 /**
  * A callback function for LLEMU's center button.
@@ -34,9 +28,10 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
+	pros::lcd::set_text(5, "hello");
 	pros::lcd::register_btn1_cb(on_center_button);
+
+	armSensor.set_position(0);
 }
 
 /**
@@ -69,6 +64,5 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	selector.run_auton();
 }
 

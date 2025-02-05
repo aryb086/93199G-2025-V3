@@ -1,4 +1,4 @@
-#include "liblvgl/llemu.hpp"
+
 #include "main.h"
 #include "pros/adi.h"
 #include "pros/llemu.hpp"
@@ -6,9 +6,7 @@
 #include "pros/motors.h"
 #include "pros/rtos.h"
 #include "pros/rtos.hpp"
-#include "robodash/views/console.hpp"
 #include "robot.h"
-#include <algorithm>
 #include <string>
 
 /** 
@@ -54,50 +52,42 @@ bool lastAState = false;
 
 //lady brown control
 void lady_brown_control(void* param){
-    int rotationPostion = 0;
-    ladyBrown.set_brake_mode(E_MOTOR_BRAKE_COAST);
-    int initial = armSensor.get_angle();
-    int pos1 = 4000;
-    int pos2 = 4000;
-    int pos3 = 1600;
-    while(true){
-        bool currentL1State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
-        if (currentL1State){
-            if(rotationPostion == 0){
-                //arm_control(pos1);
-                ladyBrown.move(80);
-                rotationPostion = 1;
-            }
-            else if(rotationPostion == 1){
-                //arm_control(pos2);
-                ladyBrown.move(80);
-                rotationPostion = 2;
-            }
-            else if(rotationPostion == 2){
-                //intake.move(-10);
-                //pros::delay(100);
-                //intake.brake();
-                //arm_control(pos3);
-                ladyBrown.move(80);
-                rotationPostion = 3;
-            }
-            else if(rotationPostion == 3){
-                //arm_control(initial);
-                ladyBrown.move(20);
-                rotationPostion = 0;
-            }
-            else{
-                currentL1State = false;
+        int rotationPosition = 0;
+        bool last_button_L1_state = false;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+        int firstStopPosition = 1900;//get ready to load ring
+        int secondStopPosition = 16000;// put ring on to the goal 
+        int lastStopPosition = 3;// arm coming back to rest
+        int currentPosition = 0;
+
+        while (true) {
+            bool current_button_L1_state = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+            if (current_button_L1_state) {  
+                if(rotationPosition == 0 ){
+                    currentPosition = arm_control(currentPosition, firstStopPosition, 0.03);
+                    rotationPosition = 1;
+                    controller.print(1, 5, "Hello");
+                }else if(rotationPosition == 1 ){
+                    intake.move(-10);
+                    pros::delay(300);
+                    intake.brake();
+                    currentPosition = arm_control(currentPosition, secondStopPosition, 0.006);  //0.004
+                    rotationPosition = 2; 
+                }else if(rotationPosition == 2 ){
+                    currentPosition = arm_control(currentPosition, lastStopPosition, 0.0067);
+                    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+                    ladyBrown.brake();
+                    rotationPosition = 0;             
+                }
+                //last_button_L1_state = current_button_L1_state;
+            } else {
+                current_button_L1_state = false;
             }
             pros::delay(20);
         }
-    }
 }
 
 // true for forward, false for backward
-
-
-
 void colorSort(void* param){
     while(true){
         std::string targetColor = *static_cast<std::string*>(param);
@@ -208,7 +198,6 @@ void opcontrol() {
         }
 
         //lady brown
-
 
         //intake piston
         if(currentLeftState && !lastLeftState){

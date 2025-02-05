@@ -1,4 +1,5 @@
 #include "liblvgl/llemu.hpp"
+#include "pros/llemu.hpp"
 #include "pros/rtos.hpp"
 #include "robot.h"
 #include "main.h"
@@ -8,61 +9,36 @@
 /**
  * PID Implementation for ladybrown for accurate, smooth, macro control
  */
-
-// Updated PID constants
-const double armkP = 0.05;   // Stronger correction
-const double armkI = 0.001;  // Small Ki for steady-state correction
-const double armkD = 0.005;  // Kd for damping oscillations
-
-const double maxVoltage = 90;
-const double minVoltage = -90;
-const double tolerance = 5.0;      // Acceptable error range
-const double maxIntegral = 5000.0; // Prevents integral windup
-
-double restrict(double value, double min, double max) {
-    return fmax(min, fmin(value, max));
-}
-
-void arm_control(double targetAngle) {
-    double error = 0;
-    double lastError = 0;
-    double integral = 0;
-    double derivative = 0;
-    double power = 0;
-
-    printf("Moving to Target: %.2f\n", targetAngle);
-
-    while (true) {
-        // Read current angle
-        double currentAngle = static_cast<double>(armSensor.get_angle());
-
-        // Calculate PID terms
-        error = currentAngle - targetAngle;
-        integral = restrict(integral + error, -maxIntegral, maxIntegral); // Prevent windup
-        derivative = error - lastError;
-
-        // Compute PID output
-        power = (armkP * error) + (armkI * integral) + (armkD * derivative);
-
-        // Limit power output
-        power = restrict(power, minVoltage, maxVoltage);
-
-        // Apply power to motor
-        ladyBrown.move(power);
-
-        // Break if within tolerance
-        if (fabs(error) < tolerance) {
-            ladyBrown.move(0);
+int arm_control(int startingPosition, int targetPosition, double constantK) {
+    int error = startingPosition - targetPosition;
+    int speed = error * constantK;
+    int i = 0;
+    ladyBrown.move(speed*-1);
+    while (error  > 50 || error < -50)
+    {
+        pros::lcd::print(3, "Error 0: %1d", i); // x
+        pros::lcd::print(4, "Speed 0: %1f", speed);  // x
+        i++;
+        pros::delay(20);
+        //startingPosition = rotational_sensor.get_position();
+        error = armSensor.get_position()*-1 - targetPosition;
+        speed = error * constantK;
+        if(speed <20 && speed>0) {
+            speed = 20;
+        } else if (speed<0 && speed>-20) {
+            speed = -20;
+        }
+        ladyBrown.move(speed*-1);
+        if (i>1000){
             break;
         }
-
-        // Store last error for derivative calculation
-        lastError = error;
-
-        // Delay to avoid excessive CPU usage
-        pros::delay(20);
     }
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    ladyBrown.brake();
+    int position = ladyBrown.get_position();
+    return position;
 }
+
 
 void intake_forward(){
 

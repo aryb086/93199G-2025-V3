@@ -55,23 +55,22 @@ void lady_brown_control(void* param){
         int rotationPosition = 0;
         bool last_button_L1_state = false;
         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        int firstStopPosition = 1900;//get ready to load ring
-        int secondStopPosition = 16000;// put ring on to the goal 
+        int firstStopPosition = 2000;//get ready to load ring
+        int secondStopPosition = 22000;// put ring on to the goal 
         int lastStopPosition = 3;// arm coming back to rest
         int currentPosition = 0;
 
         while (true) {
-            bool current_button_L1_state = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+            bool current_button_L1_state = controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1);
             if (current_button_L1_state) {  
                 if(rotationPosition == 0 ){
                     currentPosition = arm_control(currentPosition, firstStopPosition, 0.03);
                     rotationPosition = 1;
-                    controller.print(1, 5, "Hello");
                 }else if(rotationPosition == 1 ){
                     intake.move(-10);
                     pros::delay(300);
                     intake.brake();
-                    currentPosition = arm_control(currentPosition, secondStopPosition, 0.006);  //0.004
+                    currentPosition = arm_control(currentPosition, secondStopPosition, 0.009);  //0.004
                     rotationPosition = 2; 
                 }else if(rotationPosition == 2 ){
                     currentPosition = arm_control(currentPosition, lastStopPosition, 0.0067);

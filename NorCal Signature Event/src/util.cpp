@@ -11,17 +11,18 @@
  */
 int arm_control(int startingPosition, int targetPosition, double constantK) {
     int error = startingPosition - targetPosition;
+    pros::lcd::print(2, "Initial Error 0: %1d", error);
     int speed = error * constantK;
     int i = 0;
     ladyBrown.move(speed*-1);
     while (error  > 50 || error < -50)
     {
-        pros::lcd::print(3, "Error 0: %1d", i); // x
-        pros::lcd::print(4, "Speed 0: %1f", speed);  // x
+        pros::lcd::print(3, "Error 0: %1d", error); // x
+        pros::lcd::print(4, "Speed 0: %1i", armSensor.get_position());  // x
         i++;
         pros::delay(20);
         //startingPosition = rotational_sensor.get_position();
-        error = armSensor.get_position()*-1 - targetPosition;
+        error = armSensor.get_position() - targetPosition;
         speed = error * constantK;
         if(speed <20 && speed>0) {
             speed = 20;

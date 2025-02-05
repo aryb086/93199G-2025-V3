@@ -75,7 +75,8 @@ void arm_control(double targetAngle);
 void intake_forward(void);
 void intake_backward(void);
 void intake_auton(void);
-void color_switch(void);
+std::string detect_color(void);
+void color_sort(std::string);
 void intake_piston(void);
 void doinker_control(void);
 #ifdef __cplusplus

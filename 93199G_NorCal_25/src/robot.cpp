@@ -6,21 +6,19 @@
 #include "pros/optical.hpp"
 
 Controller controller(E_CONTROLLER_MASTER);
-MotorGroup left({-19, -13, -2}, MotorGearset::blue);
-MotorGroup right({-19, -13, -2}, MotorGearset::blue);
-Motor intake(10, MotorGearset::red);
-Motor ladyBrown(10, MotorGearset::red);
-ADIDigitalOut clamp('A');
-ADIDigitalOut intakePiston('B');
-ADIDigitalOut doinker('C');
-Imu imu(10);
-Rotation hTracking(10);
-Rotation vTracking(8);
-Rotation armSensor(8);
-Optical color(8);
+MotorGroup left({11, -12, -6}, MotorGearset::blue);
+MotorGroup right({-3, 7, 8}, MotorGearset::blue);
+Motor intake(13, MotorGearset::red);
+Motor ladyBrown(-15, MotorGearset::red);
+ADIDigitalOut clamp('F');
+ADIDigitalOut intakePiston('H');
+ADIDigitalOut doinker('G');
+Imu imu(4);
+Rotation hTracking(2);
+Rotation armSensor(9);
+Optical color(14);
 
 lemlib::TrackingWheel horizontal_tracking_wheel(&hTracking, lemlib::Omniwheel::NEW_2, -5.75);
-lemlib::TrackingWheel vertical_tracking_wheel(&vTracking, lemlib::Omniwheel::NEW_2, -5.75);
 
 Drivetrain drivetrain (
     &left,
@@ -32,7 +30,7 @@ Drivetrain drivetrain (
 );
 
 OdomSensors sensors(
-    &vertical_tracking_wheel,
+    nullptr,
     nullptr,
     &horizontal_tracking_wheel,
     nullptr,

@@ -71,13 +71,15 @@ void blue_neg(void);
 void blue_pos(void);
 void skills(void);
 int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD);
+void ladyBrownControl(void* param);
 void intake_forward(void);
 void intake_backward(void);
 void intake_auton(void);
 std::string detect_color(void);
-void color_sort(std::string);
+void colorSort(void* param);
 void intake_piston(void);
 void doinker_control(void);
+void clamp_control(void);
 #ifdef __cplusplus
 }
 #endif

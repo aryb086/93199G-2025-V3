@@ -33,7 +33,7 @@ bool lastR2State = false;
 
 //lady brown
 bool lastL1State = false;
-bool armRunning = false;
+bool lastL2State = false;
 
 //clamp
 bool lastDownState = false;
@@ -122,23 +122,12 @@ void ladybrownFlipping(void* param){
         }
     }
 }
-// true for forward, false for backward
-void colorSort(void* param){
-    while(true){
-        std::string targetColor = *static_cast<std::string*>(param);
-        std::string currentColor = detect_color();
-        if(currentColor == targetColor){
-            pros::delay(170);
-            intake.move(-127);
-            pros::delay(700);
-            intake.move(127);
-        }
-        pros::delay(20);
-    }
-    
-}
 
-void intakeControl(bool dir, std::string targetColor){
+
+// true for forward, false for backward
+
+
+void intakeControl(bool dir){
         if(dir){
             intake.move(127);
         }
@@ -150,12 +139,14 @@ void intakeControl(bool dir, std::string targetColor){
 void opcontrol() {
     clamp.set_value(HIGH);
     int colorPosition = 2;
+    int rotationPosition = -1;
 
     std::string targetColor = "Red";
 
     Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     Task ladyBrownHighStakes(ladybrownHighStakes, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady Brown");
     Task ladyBrownFlipping(ladybrownFlipping, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady BrownFlipping");
+    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 
     while(true){
         //movement
@@ -175,7 +166,9 @@ void opcontrol() {
 
         bool currentAState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
 
-        bool arm_started = false;
+        bool currentL1State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+
+        bool currentL2State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
 
         bool intake_started = false;
         // dataFwd = {true, targetColor};
@@ -200,7 +193,7 @@ void opcontrol() {
         if(currentR1State && !lastR1State){
             intakeRunning = !intakeRunning;
             if(intakeRunning){ 
-                intakeControl(true, targetColor);
+                intakeControl(true);
             } else {
                 intake.brake();
                 bool intake_running = true;
@@ -235,7 +228,32 @@ void opcontrol() {
         }
 
         //lady brown
+        if (currentL1State && !lastL1State) { 
+            if (rotationPosition == -1) {
+                rotationPosition = 0;
+            }
+            else if (rotationPosition == 0) {
+                rotationPosition = 1;
+            }
+            else if (rotationPosition == 1) {
+                rotationPosition = 2;
+            }
+            else if (rotationPosition == 2) {
+                rotationPosition = 3;
+            }
+        }
 
+        if (currentL2State && !lastL2State) { 
+            if (rotationPosition == -1) {
+                rotationPosition = 4;
+            }
+            else if (rotationPosition == 4) {
+                rotationPosition = 5;
+            }
+            else if (rotationPosition == 5) {
+                rotationPosition = 2;
+            }
+        }
         //intake piston
         if(currentLeftState && !lastLeftState){
             intakePistonState = !intakePistonState;
@@ -268,6 +286,7 @@ void opcontrol() {
         lastDownState = currentDownState;
         lastAState = currentAState;
         lastLeftState = currentLeftState;
+        lastL1State = currentL1State;
         
         controller.print(1, 5, "Target: %s", targetColor.c_str());
     }

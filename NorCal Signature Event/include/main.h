@@ -70,7 +70,7 @@ void red_pos(void);
 void blue_neg(void);
 void blue_pos(void);
 void skills(void);
-int arm_control(int startingPosition, int targetPosition, double constantK);
+int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD);
 void intake_forward(void);
 void intake_backward(void);
 void intake_auton(void);

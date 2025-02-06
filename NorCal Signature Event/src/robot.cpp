@@ -18,12 +18,12 @@ Rotation hTracking(2);
 Rotation armSensor(9);
 Optical color(14);
 
-lemlib::TrackingWheel horizontal_tracking_wheel(&hTracking, lemlib::Omniwheel::NEW_2, -5.75);
+lemlib::TrackingWheel horizontal_tracking_wheel(&hTracking, lemlib::Omniwheel::NEW_2, -3.1);
 
 Drivetrain drivetrain (
     &left,
     &right,
-    12.25,
+    8,
     Omniwheel::NEW_325,
     360,
     2

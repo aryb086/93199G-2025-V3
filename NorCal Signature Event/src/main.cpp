@@ -1,5 +1,6 @@
 #include "main.h"
 #include "liblvgl/llemu.hpp"
+#include "pros/adi.h"
 #include "pros/llemu.hpp"
 #include "robot.h"
 #include "pros/misc.h"
@@ -29,8 +30,17 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::print(5, "hello");
-	pros::lcd::register_btn1_cb(on_center_button);
+	chassis.calibrate();
+	pros::Task screen_task([&]() {
+        while (true) {
+            // print robot location to the brain screen
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // delay to save resources
+            pros::delay(20);
+        }
+    });
 
 	armSensor.set_position(0);
 }
@@ -65,5 +75,23 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+	// skills
+    chassis.setPose(0, 0, 0);
+	clamp.set_value(HIGH);
+	intake.move(127);
+	pros::delay(800);
+	intake.brake();
+	//go forward of alliance stake
+	chassis.moveToPoint(0,15, 3000, {.forwards = true, .maxSpeed = 80}, false);
+	pros::delay(100);
+	//pick up first mogo
+    chassis.moveToPoint(30, 15, 3000, {.forwards = false, .maxSpeed = 80}, false);
+	pros::delay(100);
+	clamp.set_value(LOW);
+	pros::delay(200);
+	//pick up first, second red king
+	chassis.moveToPoint(25,40, 3000, {.forwards = true, .maxSpeed = 80}, true);
+	intake.move(127);
+	chassis.moveToPoint(50,100, 3000, {.forwards = true, .maxSpeed = 80}, true);
 }
 

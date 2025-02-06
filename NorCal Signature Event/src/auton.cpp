@@ -6,7 +6,6 @@ void red_neg(){
 }
 
 void red_pos(){
-
 }
 
 void blue_neg(){

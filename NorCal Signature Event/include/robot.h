@@ -16,3 +16,4 @@ extern ADIDigitalOut intakePiston;
 extern ADIDigitalOut doinker;
 extern Rotation armSensor;
 extern Optical color;
+extern Rotation hTracking;

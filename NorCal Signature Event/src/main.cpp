@@ -5,20 +5,73 @@
 #include "robot.h"
 #include "pros/misc.h"
 
+int colorSelection = 0;
+void aliianceColor(){
+	static int pressed = 0;
+	if(pressed == 0) {
+		pros::lcd::clear_line(4);
+		pros::lcd::set_text(4, "--------------Color: Red------------");
+		//pros::lcd::print(4, "Color: %i", colorSelection);
+		colorSelection = 1;
+		pressed += 1;
+	}
+	else if(pressed == 1){
+		pros::lcd::clear_line(4);
+		pros::lcd::set_text(4, "-----------Color: Blue-----------");
+		//pros::lcd::print(4, "Color: %i", colorSelection);
+		colorSelection = 2;
+		pressed += 1;
+	}
+	else{
+		pros::lcd::clear_line(4);
+		pros::lcd::set_text(4, "---------------Skills---------------");
+		//pros::lcd::print(4, "Color: %i", colorSelection);
+		pressed = 0;
+		colorSelection = 0;
+	}
 
-/**
+}
+
+
+int negPositiveSelection = 0;
+void negPos(){
+	static int pressed = 0;
+	if(pressed == 0) {
+		pros::lcd::clear_line(5);
+		pros::lcd::set_text(5, "--------------Negative--------------");
+		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
+		negPositiveSelection = 1;
+		pressed += 1;
+	}
+	else{
+		pros::lcd::clear_line(5);
+		pros::lcd::set_text(5, "---------------Postive--------------");
+		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
+		pressed = 0;
+		negPositiveSelection = 0;
+	}
+
+}
+
+/**()
  * A callback function for LLEMU's center button.
  *
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
+bool selectionConfirmed = false;
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
+		pros::lcd::clear_line(6);
+		pros::lcd::set_text(6, "-----Press Again To Confirm Selection----");
+		//pros::lcd::print(6, "NegPos: %d", negPositiveSelection);
 	} else {
-		pros::lcd::clear_line(2);
+		pros::lcd::clear_line(6);
+		pros::lcd::set_text(6, "---------Selection Confirmed-------");
+		//pros::lcd::print(6, "NegPos: %d", negPositiveSelection);
+		selectionConfirmed = true;
 	}
 }
 
@@ -31,6 +84,7 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	chassis.calibrate();
+	armSensor.set_position(0);
 	pros::Task screen_task([&]() {
         while (true) {
             // print robot location to the brain screen
@@ -61,7 +115,18 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+	pros::Task autonSelector([&]() {
+        while (true) {
+            if (!selectionConfirmed) {
+				pros::lcd::register_btn0_cb(aliianceColor);
+				pros::lcd::register_btn1_cb(on_center_button);
+				pros::lcd::register_btn2_cb(negPos);
+			}
+            pros::delay(20);
+        }
+    });
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -75,23 +140,24 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	// skills
-    chassis.setPose(0, 0, 0);
-	clamp.set_value(HIGH);
-	intake.move(127);
-	pros::delay(800);
-	intake.brake();
-	//go forward of alliance stake
-	chassis.moveToPoint(0,15, 3000, {.forwards = true, .maxSpeed = 80}, false);
-	pros::delay(100);
-	//pick up first mogo
-    chassis.moveToPoint(30, 15, 3000, {.forwards = false, .maxSpeed = 80}, false);
-	pros::delay(100);
-	clamp.set_value(LOW);
-	pros::delay(200);
-	//pick up first, second red king
-	chassis.moveToPoint(25,40, 3000, {.forwards = true, .maxSpeed = 80}, true);
-	intake.move(127);
-	chassis.moveToPoint(50,100, 3000, {.forwards = true, .maxSpeed = 80}, true);
+	if(colorSelection == 1){
+		if(negPositiveSelection == 0){
+			red_pos();
+		}
+		else{
+			red_neg();
+		}
+	}
+	else if (colorSelection == 2){
+		if(negPositiveSelection == 0){
+			blue_pos();
+		}
+		else{
+			blue_neg();
+		}
+	}
+	else{
+		skills();
+	}
 }
 

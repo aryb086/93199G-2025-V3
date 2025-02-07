@@ -19,6 +19,7 @@
  * 
  * Button Down: Clamp
  * Button Left: Intake Piston
+ * Button Right: Reset Lady Brown To Intial
  * Button B: Doinker
  * Button A: Color Switcher
  * 
@@ -34,6 +35,7 @@ bool lastR2State = false;
 //lady brown
 bool lastL1State = false;
 bool lastL2State = false;
+bool lastRightState = false;
 
 //clamp
 bool lastDownState = false;
@@ -144,8 +146,8 @@ void opcontrol() {
     std::string targetColor = "Red";
 
     Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
-    Task ladyBrownHighStakes(ladybrownHighStakes, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady Brown");
-    Task ladyBrownFlipping(ladybrownFlipping, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady BrownFlipping");
+    //Task ladyBrownHighStakes(ladybrownHighStakes, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady Brown");
+    //Task ladyBrownFlipping(ladybrownFlipping, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady BrownFlipping");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 
     while(true){
@@ -169,6 +171,8 @@ void opcontrol() {
         bool currentL1State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 
         bool currentL2State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
+
+        bool currentRightState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT);
 
         bool intake_started = false;
         // dataFwd = {true, targetColor};
@@ -251,9 +255,14 @@ void opcontrol() {
                 rotationPosition = 5;
             }
             else if (rotationPosition == 5) {
-                rotationPosition = 2;
+                rotationPosition = 3;
             }
         }
+
+        if(currentRightState && !lastRightState){
+            rotationPosition = 3;
+        }
+
         //intake piston
         if(currentLeftState && !lastLeftState){
             intakePistonState = !intakePistonState;
@@ -287,7 +296,9 @@ void opcontrol() {
         lastAState = currentAState;
         lastLeftState = currentLeftState;
         lastL1State = currentL1State;
-        
+        lastL2State = currentL2State;
+
+        controller.clear_line(1);
         controller.print(1, 5, "Target: %s", targetColor.c_str());
     }
 }

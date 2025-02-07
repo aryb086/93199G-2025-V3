@@ -2,6 +2,7 @@
 
 #include "lemlib/api.hpp"
 #include "pros/imu.h"
+#include "pros/imu.hpp"
 #include "pros/motors.h"
 #include "pros/optical.hpp"
 using namespace pros;
@@ -17,3 +18,4 @@ extern ADIDigitalOut doinker;
 extern Rotation armSensor;
 extern Optical color;
 extern Rotation hTracking;
+extern Imu imu;

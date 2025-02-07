@@ -1,6 +1,7 @@
 #include "liblvgl/llemu.hpp"
 #include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "robot.h"
 #include "main.h"
@@ -11,73 +12,62 @@
 /**
  * PID Implementation for ladybrown for accurate, smooth, macro control
  */
-int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD) {
+int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD, int errorRange) {
     int error = startingPosition - targetPosition;
     int lastError = error;
-    int integral = 0; 
+    int integral = 0;
     int derivative = 0;
     int speed = 0;
-    int i = 0;
+    int timeout = 0;
 
-    pros::lcd::print(2, "Initial Error: %1d", error);
-
-    // Start moving the motor
-    ladyBrown.move(speed * -1);
-
-    // PID Loop
-    while (error > 50 || error < -50) {
-        pros::lcd::print(3, "Error: %1d", error);
-        pros::lcd::print(4, "Speed: %1i", armSensor.get_position());
-
-        i++;
-        pros::delay(20);
-
-        // Update error
-        error = armSensor.get_position() - targetPosition;
-
+    while (abs(error) > errorRange && timeout < 1000) {  // Adjusted threshold and timeout
         // Proportional term
         int pTerm = error * kP;
 
-        // Integral term (with anti-windup)
+        // Integral term with anti-windup
         integral += error;
+        if (integral > 1000) integral = 1000;
+        if (integral < -1000) integral = -1000;
         int iTerm = integral * kI;
-        // To avoid integral windup, we can clamp the integral term:
-        if (iTerm > 1000) iTerm = 1000;
-        else if (iTerm < -1000) iTerm = -1000;
 
         // Derivative term
         derivative = error - lastError;
         int dTerm = derivative * kD;
 
-        // Combine all terms
+        // Calculate speed
         speed = pTerm + iTerm + dTerm;
 
-        // Set a minimum speed threshold to avoid stalling
-        if (speed < 20 && speed > 0) {
-            speed = 20;
-        } else if (speed < 0 && speed > -20) {
-            speed = -20;
-        }
+        // Clamp speed to avoid stalling
+        if (speed > 127) speed = 127;
+        if (speed < -127) speed = -127;
 
-        ladyBrown.move(speed * -1);
+        // Move the motor
+        ladyBrown.move(speed*-1);
 
-        // Save the last error for the next derivative calculation
+        // Update error
         lastError = error;
+        error = armSensor.get_position() - targetPosition;
 
-        if (i > 1000) {
-            break;
-        }
+        // Debugging
+        pros::lcd::print(0, "Error: %d", error);
+        pros::lcd::print(1, "Speed: %d", speed);
+
+        // Increment timeout
+        timeout++;
+        pros::delay(20);
     }
 
-    // After reaching the position, brake
+    // Brake the motor
     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     ladyBrown.brake();
 
-    // Return the final position
-    int position = ladyBrown.get_position();
-    return position;
-}
+    // Debugging
+    if (timeout >= 1000) {
+        pros::lcd::print(5, "PID Timeout!");
+    }
 
+    return ladyBrown.get_position();
+}
 
 void intake_forward(){
     intake.move(127);
@@ -108,7 +98,7 @@ std::string detect_color(){
     double hue = color.get_hue();
     double red = 20.0;
     double blue = 185.0;
-    if(color.get_proximity() < 10){
+    if(color.get_proximity() < 5){
         if(hue < red){
             return "Blue";
         }
@@ -124,10 +114,14 @@ void colorSort(void* param){
         std::string targetColor = *static_cast<std::string*>(param);
         std::string currentColor = detect_color();
         if(currentColor == targetColor){
-            pros::delay(170);
-            intake.move(-127);
-            pros::delay(700);
-            intake.move(127);
+            if(intake.get_target_velocity() > 0){
+                pros::delay(150);
+                intake.move(-127);
+                pros::delay(800);
+                intake.move(0);
+                pros::delay(100);
+                intake.move(127);
+            }
         }
         pros::delay(20);
     }
@@ -141,54 +135,63 @@ void colorSort(void* param){
 3 for returning to starting,
 4 for getting ready to unflip,
 5 for unflip */
-void ladyBrownControl(void* param){
-    int rotationPosition = *static_cast<int*>(param);
-    int firstStopPosition = 1500;
-    int secondStopPosition = 3500;
-    int thirdStopPosition = 20000;
+void ladyBrownControl(void* param) {
+    int* rotationPositionPtr = static_cast<int*>(param);
+    int firstStopPosition = 1800;
+    int secondStopPosition = 6000;
+    int thirdStopPosition = 16000;
     int fourthStopPostion = 20000;
-    int fifthStopPosition = 26000;
+    int fifthStopPostion = 25000;
     int lastStopPosition = 100;
-    while(true){
+
+    while (true) {
+        int currentRotationPosition = *rotationPositionPtr; // Dereference each loop
         int currentPosition = armSensor.get_position();
-        if(rotationPosition == 0 ){
-            currentPosition = arm_control(currentPosition,firstStopPosition, 0.0235, 0.001, 0.04);
-        }else if(rotationPosition == 1 ){
-            intake.move(-10);
-            pros::delay(300);
-            intake.brake();
-            currentPosition = arm_control(currentPosition, secondStopPosition, 0.0235, 0.001, 0.04);  //0.004
-        }else if(rotationPosition == 2 ){
-            currentPosition = arm_control(currentPosition, thirdStopPosition, 0.015, 0.0, 0.04);  //0.004
-        }
-        else if(rotationPosition == 3 ){
-            currentPosition = arm_control(currentPosition, lastStopPosition, 0.009, 0.0, 0.02);
-            ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+        if (currentRotationPosition == 0) {
+            currentPosition = arm_control(currentPosition, firstStopPosition, 0.025, 0.0, 0.02, 800);
             ladyBrown.brake();
-            rotationPosition = -1;
+            currentRotationPosition = 1;
+        } else if (currentRotationPosition == 1) {
+            intake.move(-80);
+            currentPosition = arm_control(currentPosition, secondStopPosition, 0.03, 0.001, 0.04, 1500);
+            pros::delay(200);
+            intake.move(127);
+        } else if (currentRotationPosition == 2) {
+            currentPosition = arm_control(currentPosition, thirdStopPosition, 0.015, 0.0, 0.04, 800);
+        } else if (currentRotationPosition == 3) {
+            currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 200);
+            ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+            ladyBrown.brake();
+            *rotationPositionPtr = -1; // Update opcontrol's variable
         }
-        else if(rotationPosition == 4 ){
-                currentPosition = arm_control(currentPosition,firstStopPosition, 0.024, 0.0, 0.04);
-        }else if(rotationPosition == 5 ){
-                currentPosition = arm_control(currentPosition, secondStopPosition, 0.02, 0.0, 0.04);  //0.004
+        else if (currentRotationPosition == 4) {
+            currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
         }
+        else if (currentRotationPosition == 5) {
+            currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 1500);
+            ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+            ladyBrown.brake();
+        }
+
+        pros::delay(20); // Prevent CPU hogging
     }
 }
 
-bool intakePistonState = false;
+bool intakePistonState1 = false;
 void intake_piston(){
-    intakePistonState = !intakePistonState;
-    intakePiston.set_value(intakePistonState);
+    intakePistonState1 = !intakePistonState1;
+    intakePiston.set_value(intakePistonState1);
 }
 
-bool doinkerState = false;
+bool doinkerState1 = false;
 void doinker_control(){
-    doinkerState = !doinkerState;
-    intakePiston.set_value(doinkerState);
+    doinkerState1 = !doinkerState1;
+    intakePiston.set_value(doinkerState1);
 }
 
-bool clampState = false;
+bool clampState1 = false;
 void clamp_control(){
-    clampState = !clampState;
-    intakePiston.set_value(clampState);
+    clampState1 = !clampState1;
+    intakePiston.set_value(clampState1);
 }

@@ -141,7 +141,7 @@ void intakeControl(bool dir){
 void opcontrol() {
     clamp.set_value(HIGH);
     int colorPosition = 2;
-    int rotationPosition = -1;
+    int rotationPosition = 3;
 
     std::string targetColor = "Red";
 

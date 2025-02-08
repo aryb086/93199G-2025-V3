@@ -237,6 +237,7 @@ void opcontrol() {
                 rotationPosition = 0;
             }
             else if (rotationPosition == 0) {
+                intake.move(-80);
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
@@ -248,7 +249,7 @@ void opcontrol() {
         }
 
         if (currentL2State && !lastL2State) { 
-            if (rotationPosition == -1) {
+            if (rotationPosition == -1 || rotationPosition == 0) {
                 rotationPosition = 4;
             }
             else if (rotationPosition == 4) {

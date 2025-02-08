@@ -140,7 +140,7 @@ void ladyBrownControl(void* param) {
     int firstStopPosition = 1800;
     int secondStopPosition = 6000;
     int thirdStopPosition = 16000;
-    int fourthStopPostion = 20000;
+    int fourthStopPostion = 18000;
     int fifthStopPostion = 25000;
     int lastStopPosition = 100;
 
@@ -153,20 +153,20 @@ void ladyBrownControl(void* param) {
             ladyBrown.brake();
             currentRotationPosition = 1;
         } else if (currentRotationPosition == 1) {
-            intake.move(-80);
             currentPosition = arm_control(currentPosition, secondStopPosition, 0.03, 0.001, 0.04, 1500);
-            pros::delay(200);
-            intake.move(127);
         } else if (currentRotationPosition == 2) {
             currentPosition = arm_control(currentPosition, thirdStopPosition, 0.015, 0.0, 0.04, 800);
         } else if (currentRotationPosition == 3) {
-            currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 200);
+            currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 400);
             ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
             ladyBrown.brake();
             *rotationPositionPtr = -1; // Update opcontrol's variable
         }
         else if (currentRotationPosition == 4) {
+            intake.move(-80);
             currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
+            pros::delay(200);
+            intake.move(127);
         }
         else if (currentRotationPosition == 5) {
             currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 1500);

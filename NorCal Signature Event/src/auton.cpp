@@ -5,20 +5,116 @@
 
 void red_neg(){
     lcd::print(7, "Red Neg");
+
+    int rotationPosition = -1;
+    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+
+    chassis.setPose(-59, 12, 90);
+	clamp.set_value(HIGH);
+
+    // scoring ring on alliance stake
+    chassis.turnToPoint(-69,0, 3000);
+    rotationPosition = 4;
+    pros::delay(1000);
+    rotationPosition = 3;
+
+    // clamping the mogo
+    chassis.turnToPoint(-23,23, 3000);
+    chassis.moveToPoint(-23,23, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    clamp.set_value(LOW);
+
+    // scoring 2 rings in the center
+    chassis.turnToPoint(-10,38, 3000);
+    chassis.moveToPoint(-10,38, 3000, {.forwards = true, .maxSpeed = 40}, false);
+    intake.move(127);
+    chassis.turnToPoint(-10,45, 3000);
+    chassis.moveToPoint(-10,45, 3000, {.forwards = true, .maxSpeed = 40}, false);
+
+    //scoring 3rd ring 
+    chassis.turnToPoint(-23,47, 3000);
+    chassis.moveToPoint(-23,47, 3000, {.forwards = true, .maxSpeed = 50}, false);
+
+    //scoring 4th ring
+    chassis.turnToPoint(-66,66, 3000);
+    chassis.moveToPoint(-66, 66, 3000, {.forwards = true, .maxSpeed = 70}, false);
+
+    //scoring 5th ring
+    intakePiston.set_value(HIGH);
+    chassis.turnToPoint(-46,0, 3000);
+    chassis.moveToPoint(-46,0, 3000, {.forwards = true, .maxSpeed = 70}, false);
+
+    //touching ladder 
+    chassis.turnToPoint(-24,14, 3000);
+    intakePiston.set_value(LOW);
+    chassis.moveToPoint(-24,14, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    chassis.turnToPoint(-17,8, 3000);
+    chassis.moveToPoint(-17,8, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    rotationPosition = 2;
+
 }
 
 void red_pos(){
     lcd::print(7, "Red Pos");
+
+    int rotationPosition = -1;
+    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+
+
+    chassis.setPose(-51, -58, 90);
+	clamp.set_value(HIGH);
+
+    // rushing the mogo and pulling it back
+	chassis.moveToPoint(-15,-58, 3000, {.forwards = true, .maxSpeed = 90}, false);
+	pros::delay(1000);
+    intake.brake();
+    chassis.turnToPoint(9, -34, 1000);
+    doinker.set_value(HIGH);
+    chassis.moveToPoint(-32,-62, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    pros::delay(3000);
+    doinker.set_value(LOW);
+
+    //clamping rushed mogo
+    chassis.turnToPoint(-65,-62, 3000);
+    chassis.moveToPoint(-23,-62, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    clamp.set_value(LOW);
+
+    // scoring preload on first mogo
+    intake.move(127);
+    pros::delay(1000);
+    intake.brake();
+    
+    // dropping 1st mogo and picking up 2nd one
+    clamp.set_value(HIGH);
+    chassis.turnToPoint(-23,-23, 3000);
+    intake.move(127);
+    chassis.moveToPoint(-23,-39, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    pros::delay(1500);
+    intake.brake();
+    chassis.turnToPoint(-23,60,1000);
+    chassis.moveToPoint(-23,-23, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    clamp.set_value(LOW);
+
+    // scoring a ring on 2nd mogo
+    intake.move(127);
+    pros::delay(2000);
+
+    // touching the ladder
+    chassis.turnToPoint(-15,-8, 3000);
+    chassis.moveToPoint(-15,-8, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    pros::delay(1000);
+    rotationPosition = 2;
+
 }
 
 void blue_neg(){
     lcd::print(7, "Blue Neg");
-
 }
 
 void blue_pos(){
     lcd::print(7, "Blue Pos");
 }
+
+
 void skills(){
     // skills
     int rotationPosition = -1;
@@ -113,7 +209,4 @@ void skills(){
     rotationPosition = 5;
     pros::delay(800);
     chassis.moveToPoint(0, 150, 3000, {.forwards = false, .maxSpeed = 40}, false);
- 
-
-
 }

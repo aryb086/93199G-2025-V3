@@ -3,6 +3,7 @@
 #include "pros/adi.h"
 #include "pros/llemu.hpp"
 #include "pros/motors.h"
+#include "pros/rtos.h"
 #include "robot.h"
 #include <string>
 
@@ -264,7 +265,7 @@ void skills(){
 
     //score on high stake
     chassis.moveToPoint(67, 63.5, 1000, {.forwards = true, .maxSpeed = 60}, false);
-    intake.move(-100);
+    intake.move(-90);
     pros::delay(200);
     rotationPosition = 5;
     pros::delay(800);
@@ -282,7 +283,7 @@ void skills(){
     pros::delay(800);
 
     //put goal in corner with 6 rings
-    chassis.moveToPoint(50,6, 3000, {.forwards = true, .maxSpeed = 110}, false);
+    chassis.moveToPoint(50,6, 3000, {.forwards = true, .maxSpeed = 90}, false);
     pros::delay(500);
     chassis.moveToPoint(50,0, 3000, {.forwards = true, .maxSpeed = 70}, false);
     chassis.turnToPoint(65, 20, 1000);
@@ -307,7 +308,7 @@ void skills(){
     chassis.turnToPoint(70, 140, 1000, {.forwards = true, .maxSpeed = 90});
     doinker2.set_value(HIGH);
     chassis.moveToPoint(60, 130, 3000, {.forwards = true, .maxSpeed = 90}, false);
-    chassis.turnToPoint(90, 150, 1000, {.forwards = false, .maxSpeed = 90});
+    chassis.turnToPoint(90, 150, 1000, {.forwards = false, .maxSpeed = 70});
     doinker2.set_value(LOW);
     chassis.moveToPoint(70, 125, 2000, {.forwards = false, .maxSpeed = 90}, false);
     clamp.set_value(HIGH);
@@ -320,7 +321,7 @@ void skills(){
     clamp.set_value(LOW);
     pros::delay(500);
     chassis.turnToHeading(7, 1000);
-    chassis.moveToPoint(15, 121.5, 3000, {.forwards = true, .maxSpeed = 40}, false);
+    chassis.moveToPoint(15, 120, 3000, {.forwards = true, .maxSpeed = 40}, false);
     rotationPosition = 5;
     pros::delay(800);
     chassis.moveToPoint(15, 115, 2000, {.forwards = false, .maxSpeed = 70}, false);
@@ -332,8 +333,8 @@ void skills(){
     intake.move(127);
     chassis.moveToPoint(40, 100, 4000, {.forwards = true, .maxSpeed = 90, .minSpeed = 20, .earlyExitRange = 10}, false);
     chassis.moveToPoint(40, 85, 4000, {.forwards = true, .maxSpeed = 90}, false);
-    chassis.turnToPoint(-33, 22, 1000);
-    chassis.moveToPoint(-33, 22, 4000, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.turnToPoint(-33, 13, 1000);
+    chassis.moveToPoint(-33, 13, 4000, {.forwards = true, .maxSpeed = 90}, false);
     delay(200);
     chassis.turnToPoint(-33, 0, 1000);
     chassis.moveToPoint(-33, 0, 4000, {.forwards = true, .maxSpeed = 60}, false);
@@ -342,26 +343,23 @@ void skills(){
     chassis.turnToPoint(-50, 10, 1000);
     chassis.moveToPoint(-50, 10, 2000, {.forwards = true, .maxSpeed = 60}, false);
     delay(600);
-    chassis.moveToPoint(-45, 0, 1000, {.forwards = false, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-55, 0, 1000, {.forwards = false, .maxSpeed = 80}, false);
     delay(300);
     clamp.set_value(HIGH);
 
     //get 4th goal
     chassis.moveToPoint(-30, 10, 3000, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.moveToPoint(-20, 10, 3000, {.forwards = false, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-10, 10, 3000, {.forwards = false, .maxSpeed = 80}, false);
     delay(100);
     clamp.set_value(LOW);
     delay(200);
 
     //fill up 4th goal
-    rotationPosition = 0;
-    chassis.moveToPoint(-40, 20, 4000, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.moveToPoint(-40, 62, 4000, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.turnToPoint(-60, 62, 4000, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.moveToPoint(-60, 62, 4000, {.forwards = true, .maxSpeed = 80}, false);
-    intake.move(-100);
-    delay(200);
-    rotationPosition = 5;
-    delay(500);
-    chassis.moveToPoint(-40, 62, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-45, 30, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.turnToPoint(-45, 100, 1000);
+    chassis.moveToPoint(-45, 110, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-65, 140, 4000, {.forwards = false}, false);
+    clamp.set_value(HIGH);
+    pros::delay(200);
+    chassis.moveToPoint(-40, 100, 4000, {.forwards = true, .maxSpeed = 80}, false);
 }

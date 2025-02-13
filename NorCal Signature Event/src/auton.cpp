@@ -11,79 +11,6 @@
 
 void red_pos(){
     lcd::print(7, "Red Pos");
-    
-    int rotationPosition = -1;
-    std::string targetColor = "Red";
-    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
-   
-    chassis.setPose(58, 24, 90);
-	clamp.set_value(HIGH);
-    rotationPosition = 0;
-
-    // getting mogo #1
-    chassis.moveToPoint(23,23, 3000, {.forwards = false, .maxSpeed = 70}, false);
-
-
-
-}
-
-
-void red_pos_2(){
-    lcd::print(7, "Red Pos");
-
-    int rotationPosition = -1;
-    std::string targetColor = "Red";
-    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
-    //Task colorSortTask(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
-
-    chassis.setPose(-59, 12, 180);
-	clamp.set_value(HIGH);
-    rotationPosition = 0;
-    intake.move(127);
-    pros::delay(800);
-
-    // scoring ring on alliance stake
-    chassis.turnToPoint(-69,0, 3000, {.maxSpeed = 80}, false);
-    pros::delay(200);
-    intake.move(-80);
-    rotationPosition = 5;
-    pros::delay(1000);
-   
-
-    // clamping the mogo
-    chassis.moveToPoint(-23,23, 3000, {.forwards = false, .maxSpeed = 70}, false);
-    rotationPosition = 3;
-    pros::delay(300);
-    ladybrownTask.remove();
-    clamp.set_value(LOW);
-    pros::delay(600);
-    intake.move(127);
-
-    // scoring 1 rings in the center
-    chassis.turnToPoint(-29,50, 1000);
-    chassis.moveToPoint(-29,50, 3000, {.forwards = true, .maxSpeed = 70}, false);
-    intake.move(127);
-    chassis.turnToPoint(-12,50, 1000);
-    chassis.moveToPoint(-12,50, 3000, {.forwards = true, .maxSpeed = 70}, false);
-    chassis.moveToPoint(-30,58, 3000, {.forwards = false, .maxSpeed = 70}, false);
-
-    //scoring 5th rings
-    chassis.turnToPoint(-48,-3, 1000);
-    intakePiston.set_value(HIGH);
-    chassis.moveToPoint(-48,-3, 3000, {.forwards = true, .maxSpeed = 70}, false);
-    pros::delay(200);
-    intakePiston.set_value(LOW);
-
-    //touching ladder 
-    chassis.moveToPoint(-25,30, 3000, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.turnToPoint(-25,10, 1000, {.forwards = true}, false);
-    chassis.moveToPoint(-25,10, 3000, {.forwards = true, .maxSpeed = 90}, false);
-    
-    //colorSortTask.remove();
-}
-
-void red_neg(){
-    lcd::print(7, "Red Neg");
 
     int rotationPosition = -1;
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
@@ -117,12 +44,82 @@ void red_neg(){
     clamp.set_value(LOW);
     intake.move(127);
 
-    // getting second ring
+    // doinkering corner rings and scoring 2 rings
     chassis.turnToPoint(-23, -64, 1000);
-    chassis.moveToPoint(-23,-24, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    chassis.moveToPoint(-23,-64, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    chassis.turnToPoint(-56, -60, 1000);
+    chassis.moveToPoint(-56,-60, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    doinker2.set_value(HIGH);
+    chassis.turnToPoint(-59, 0, 1000);
+    pros::delay(300);
+    doinker2.set_value(LOW);
+    chassis.turnToPoint(-66, -56, 1000);
+    chassis.moveToPoint(-66,-56, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    // ARYAN INSERT COLOR SENSOR THINGY HERE
+    chassis.moveToPoint(-66,-37, 3000, {.forwards = true, .maxSpeed = 90}, false);
+
+    //going to ladder
+    chassis.turnToPoint(-19, -14, 1000);
+    chassis.moveToPoint(-19,-14, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    rotationPosition = 2;
+
+    
+    
 
 
 
+}
+
+
+void red_neg(){
+    lcd::print(7, "Red Neg");
+
+    int rotationPosition = -1;
+    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+
+
+    chassis.setPose(-58, 12, 225);
+	clamp.set_value(HIGH);
+
+    // scoring preload using lady brown
+    rotationPosition = 0;
+    intake.move(127);
+    pros::delay(400);
+    intake.brake();
+    rotationPosition = 2;
+
+    // clamping first mogo
+    chassis.turnToPoint(-68, -8, 1000);
+    chassis.moveToPoint(-23,23, 2000, {.forwards = false, .maxSpeed = 90}, false);
+    clamp.set_value(LOW);
+
+    // scoring 2 rings onto mogo
+    intake.move(127);
+    chassis.turnToPoint(-11, 38, 1000);
+    chassis.moveToPoint(-11,38, 2000, {.forwards = true, .maxSpeed = 30}, false);
+    chassis.turnToPoint(-8, 48, 1000);
+    chassis.moveToPoint(-8,48, 2000, {.forwards = true, .maxSpeed = 30}, false);
+
+    // scoring 3rd ring onto mogo
+    chassis.turnToPoint(-23, 46, 1000);
+    chassis.moveToPoint(-23,46, 2000, {.forwards = true, .maxSpeed = 30}, false);
+
+    // scoring 4th ring onto mogo
+    chassis.turnToPoint(-66, 66, 1000);
+    chassis.moveToPoint(-66,66, 2000, {.forwards = true, .maxSpeed = 70}, false);
+    chassis.moveToPoint(-57,59, 2000, {.forwards = false, .maxSpeed = 70}, false);
+
+    // scoring 5th ring onto mogo
+    intakePiston.set_value(HIGH);
+    chassis.turnToPoint(-46, 0, 1000);
+    chassis.moveToPoint(-46,0, 1000, {.forwards = true, .maxSpeed = 70}, false);
+    
+    // touching ladder
+    chassis.turnToPoint(-24, 13, 1000);
+    chassis.moveToPoint(-24,13, 2000, {.forwards = true, .maxSpeed = 70}, false);
+    chassis.turnToPoint(-15, 10, 1000);
+    chassis.moveToPoint(-15,10, 1000, {.forwards = true, .maxSpeed = 70}, false);
+    rotationPosition = 2;
 
 
 

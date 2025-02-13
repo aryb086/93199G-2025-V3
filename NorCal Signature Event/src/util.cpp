@@ -137,7 +137,7 @@ void colorSort(void* param){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 1800;
+    int firstStopPosition = 1900;
     int secondStopPosition = 6000;
     int thirdStopPosition = 16000;
     int fourthStopPostion = 18000;
@@ -163,10 +163,7 @@ void ladyBrownControl(void* param) {
             *rotationPositionPtr = -1; // Update opcontrol's variable
         }
         else if (currentRotationPosition == 4) {
-            intake.move(-80);
             currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
-            pros::delay(200);
-            intake.move(127);
         }
         else if (currentRotationPosition == 5) {
             currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 1500);

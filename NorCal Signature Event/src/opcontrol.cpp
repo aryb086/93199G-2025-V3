@@ -145,7 +145,7 @@ void opcontrol() {
 
     std::string targetColor = "Red";
 
-    Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
+    //Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     //Task ladyBrownHighStakes(ladybrownHighStakes, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady Brown");
     //Task ladyBrownFlipping(ladybrownFlipping, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady BrownFlipping");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
@@ -250,6 +250,7 @@ void opcontrol() {
 
         if (currentL2State && !lastL2State) { 
             if (rotationPosition == -1 || rotationPosition == 0) {
+                intake.move(-80);
                 rotationPosition = 4;
             }
             else if (rotationPosition == 4) {
@@ -299,7 +300,6 @@ void opcontrol() {
         lastL1State = currentL1State;
         lastL2State = currentL2State;
 
-        controller.clear_line(1);
         controller.print(1, 5, "Target: %s", targetColor.c_str());
     }
 }

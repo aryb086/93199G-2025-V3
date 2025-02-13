@@ -15,6 +15,7 @@ extern Motor ladyBrown;
 extern ADIDigitalOut clamp;
 extern ADIDigitalOut intakePiston;
 extern ADIDigitalOut doinker;
+extern ADIDigitalOut doinker2;
 extern Rotation armSensor;
 extern Optical color;
 extern Rotation hTracking;

@@ -36,10 +36,12 @@ bool lastR2State = false;
 bool lastL1State = false;
 bool lastL2State = false;
 bool lastRightState = false;
+bool lastYState = false;
 
 //clamp
 bool lastDownState = false;
 bool clampState = LOW;
+std::string clampStateString = "LOCK";
 
 //doinker 
 bool lastBState = false;
@@ -51,80 +53,6 @@ bool intakePistonState = LOW;
 
 //color sort 
 bool lastAState = false;
-
-//lady brown control
-void ladybrownHighStakes(void* param){
-        int rotationPosition = 0;
-        bool last_button_L1_state = false;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        int firstStopPosition = 1500;//get ready to load ring
-        int secondStopPosition = 3500;
-        int thirdStopPosition = 20000;// put ring on to the goal 
-        int lastStopPosition = 100;// arm coming back to rest
-        int currentPosition = 0;
-
-        while (true) {
-            bool current_button_L1_state = controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1);
-            if (current_button_L1_state) {  
-                if(rotationPosition == 0 ){
-                    currentPosition = arm_control(currentPosition,firstStopPosition, 0.0235, 0.001, 0.04);
-                    rotationPosition = 1;
-                }else if(rotationPosition == 1 ){
-                    intake.move(-10);
-                    pros::delay(300);
-                    intake.brake();
-                    currentPosition = arm_control(currentPosition, secondStopPosition, 0.0235, 0.001, 0.04);  //0.004
-                    rotationPosition = 2; 
-                }else if(rotationPosition == 2 ){
-                    currentPosition = arm_control(currentPosition, thirdStopPosition, 0.015, 0.0, 0.04);  //0.004
-                    rotationPosition = 3; 
-                }
-                else if(rotationPosition == 3 ){
-                    currentPosition = arm_control(currentPosition, lastStopPosition, 0.009, 0.0, 0.02);
-                    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-                    ladyBrown.brake();
-                    rotationPosition = 0;             
-                }
-                //last_button_L1_state = current_button_L1_state;
-            } else {
-                current_button_L1_state = false;
-            }
-            pros::delay(20);
-        }
-}
-
-void ladybrownFlipping(void* param){
-    int rotationPosition = 0;
-    bool last_button_L2_state = false;
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    int firstStopPosition = 20000;//get ready to load ring
-    int secondStopPosition = 26000;
-    int lastStopPosition = 100;
-    int currentPosition = 0;
-
-    while (true) {
-        bool current_button_L2_state = controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2);
-        if (current_button_L2_state) {  
-            if(rotationPosition == 0 ){
-                currentPosition = arm_control(currentPosition,firstStopPosition, 0.024, 0.0, 0.04);
-                rotationPosition = 1;
-            }else if(rotationPosition == 1 ){
-                currentPosition = arm_control(currentPosition, secondStopPosition, 0.02, 0.0, 0.04);  //0.004
-                rotationPosition = 2; 
-            }else if(rotationPosition == 3 ){
-                currentPosition = arm_control(currentPosition, lastStopPosition, 0.009, 0.0, 0.02);
-                ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-                ladyBrown.brake();
-                rotationPosition = 0;             
-            }
-            else {
-                current_button_L2_state = false;
-            }
-            pros::delay(20);
-        }
-    }
-}
-
 
 // true for forward, false for backward
 
@@ -139,15 +67,13 @@ void intakeControl(bool dir){
 }
 
 void opcontrol() {
-    clamp.set_value(HIGH);
+    //clamp.set_value(HIGH);
     int colorPosition = 2;
     int rotationPosition = 3;
 
     std::string targetColor = "Red";
 
-    //Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
-    //Task ladyBrownHighStakes(ladybrownHighStakes, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady Brown");
-    //Task ladyBrownFlipping(ladybrownFlipping, NULL, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Lady BrownFlipping");
+    Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 
     while(true){
@@ -167,6 +93,8 @@ void opcontrol() {
         bool currentLeftState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT);
 
         bool currentAState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+
+        bool currentYState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
 
         bool currentL1State = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
 
@@ -223,11 +151,11 @@ void opcontrol() {
 
             if(clampState){
                 clamp.set_value(LOW);
-                controller.print(1, 5, "LOCK");
+                clampStateString = "LOCK";
             }
             else{
                 clamp.set_value(HIGH);
-                controller.print(1, 5, "NO LOCK");
+                clampStateString = "LOCK";
             }
         }
 
@@ -237,7 +165,7 @@ void opcontrol() {
                 rotationPosition = 0;
             }
             else if (rotationPosition == 0) {
-                intake.move(-80);
+                intake.move(-40);
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
@@ -250,7 +178,7 @@ void opcontrol() {
 
         if (currentL2State && !lastL2State) { 
             if (rotationPosition == -1 || rotationPosition == 0) {
-                intake.move(-80);
+                intake.move(-40);
                 rotationPosition = 4;
             }
             else if (rotationPosition == 4) {
@@ -263,6 +191,10 @@ void opcontrol() {
 
         if(currentRightState && !lastRightState){
             rotationPosition = 3;
+        }
+
+        if(currentYState && !lastYState){
+            rotationPosition = 0;
         }
 
         //intake piston
@@ -296,10 +228,11 @@ void opcontrol() {
         lastBState = currentBState;
         lastDownState = currentDownState;
         lastAState = currentAState;
+        lastYState = currentYState;
         lastLeftState = currentLeftState;
         lastL1State = currentL1State;
         lastL2State = currentL2State;
 
-        controller.print(1, 5, "Target: %s", targetColor.c_str());
+        controller.print(1, 0, "Color: %s Clamp: %s" , targetColor.c_str(), clampStateString.c_str());
     }
 }

@@ -10,12 +10,13 @@ MotorGroup left({11, -12, -6}, MotorGearset::blue);
 MotorGroup right({-3, 7, 8}, MotorGearset::blue);
 Motor intake(13, MotorGearset::green);
 Motor ladyBrown(-15, MotorGearset::red);
-ADIDigitalOut clamp('F');
-ADIDigitalOut intakePiston('H');
+ADIDigitalOut clamp('H');
+ADIDigitalOut intakePiston('F');
 ADIDigitalOut doinker('G');
+ADIDigitalOut doinker2('E');
 Imu imu(4);
 Rotation hTracking(2);
-Rotation armSensor(9);
+Rotation armSensor(18);
 Optical color(14);
 
 lemlib::TrackingWheel horizontal_tracking_wheel(&hTracking, lemlib::Omniwheel::NEW_2, -3.1);

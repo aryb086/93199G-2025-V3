@@ -71,7 +71,10 @@ void blue_neg(void);
 void blue_pos(void);
 void skills(void);
 int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD, int errorRange = 200);
+int arm_control2(int targetPosition, int speed, int minError);
 void ladyBrownControl(void* param);
+void ladyBrownControl2(void* param);
+
 void intake_forward(void);
 void intake_backward(void);
 void intake_auton(void);

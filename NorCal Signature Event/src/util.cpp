@@ -66,7 +66,7 @@ int arm_control(int startingPosition, int targetPosition, double kP, double kI, 
         pros::lcd::print(5, "PID Timeout!");
     }
 
-    return ladyBrown.get_position();
+    return armSensor.get_position();
 }
 
 void intake_forward(){
@@ -137,9 +137,9 @@ void colorSort(void* param){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 1900;
+    int firstStopPosition = 2100;
     int secondStopPosition = 6000;
-    int thirdStopPosition = 16000;
+    int thirdStopPosition = 15500;
     int fourthStopPostion = 18000;
     int fifthStopPostion = 25000;
     int lastStopPosition = 100;
@@ -174,6 +174,7 @@ void ladyBrownControl(void* param) {
         pros::delay(20); // Prevent CPU hogging
     }
 }
+
 
 bool intakePistonState1 = false;
 void intake_piston(){

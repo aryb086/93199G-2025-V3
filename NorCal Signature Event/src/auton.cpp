@@ -88,48 +88,42 @@ void red_neg(){
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 
 
-    chassis.setPose(-58, -53, 90);
+    chassis.setPose(-58, -57, 90);
 	clamp.set_value(HIGH);
 
-    // rushing the mogo and pulling it back
+    // rushing the mogo, lady browning it and tipping it
+    rotationPosition = 0;
+    intake.move(127);
+    pros::delay(400);
+    intake.brake();
 	chassis.moveToPoint(-9,-53, 3000, {.forwards = true, .maxSpeed = 90}, false);
     chassis.turnToPoint(9, -34, 1000);
-    doinker.set_value(HIGH);
-    chassis.moveToPoint(-28,-63, 3000, {.forwards = false, .maxSpeed = 90}, false);
-    pros::delay(1000);
-    doinker.set_value(LOW);
-
-    //clamping rushed mogo
-    chassis.turnToPoint(-12,-58, 3000, {.forwards = false, .maxSpeed = 90}, false);
-    chassis.moveToPoint(-12,-58, 3000, {.forwards = false, .maxSpeed = 90}, false);
+    intake.move(-100);
     pros::delay(200);
-    clamp.set_value(LOW);
-    pros::delay(400);
-
-    // scoring preload on first mogo
-    intake.move(127);
+    rotationPosition = 5;
+    chassis.turnToPoint(-13, -69, 1000);
     
-    // dropping 1st mogo and picking up 2nd one
-    clamp.set_value(HIGH);
-    chassis.turnToPoint(-23,-23, 3000);
-    chassis.moveToPoint(-23,-39, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    // getting first ring
+    chassis.turnToPoint(-23, -47, 1000);
+    intake.move(127);
+    chassis.moveToPoint(-23,-47, 3000, {.forwards = true, .maxSpeed = 90}, false);
     pros::delay(1000);
     intake.brake();
-    chassis.turnToPoint(-23,-23, 3000, {.forwards = false, .maxSpeed = 90}, false);
+
+    // getting mogo, clamping, and scoring one ring
+    chassis.turnToPoint(-23, -69, 1000);
     chassis.moveToPoint(-23,-23, 3000, {.forwards = false, .maxSpeed = 90}, false);
-    pros::delay(200);
     clamp.set_value(LOW);
-    pros::delay(400);
-
-
-    // scoring a ring on 2nd mogo
     intake.move(127);
 
-    // touching the ladder
-    chassis.turnToPoint(-12,-13, 3000);
-    chassis.moveToPoint(-12,-13, 3000, {.forwards = true, .maxSpeed = 90}, false);
-    pros::delay(300);
-    rotationPosition = 2;
+    // getting second ring
+    chassis.turnToPoint(-23, -64, 1000);
+    chassis.moveToPoint(-23,-24, 3000, {.forwards = false, .maxSpeed = 90}, false);
+
+
+
+
+
 
 }
 

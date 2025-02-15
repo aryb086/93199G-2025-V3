@@ -114,7 +114,7 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {
-	/* pros::Task autonSelector([&]() {
+	pros::Task autonSelector([&]() {
         while (true) {
             if (!selectionConfirmed) {
 				pros::lcd::register_btn0_cb(aliianceColor);
@@ -123,7 +123,7 @@ void competition_initialize() {
 			}
             pros::delay(20);
         }
-    }); */
+    }); 
 }
 
 /**

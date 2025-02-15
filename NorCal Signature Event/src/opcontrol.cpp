@@ -40,7 +40,7 @@ bool lastYState = false;
 
 //clamp
 bool lastDownState = false;
-bool clampState = LOW;
+bool clampState = HIGH;
 std::string clampStateString = "LOCK";
 
 //doinker 
@@ -73,7 +73,7 @@ void opcontrol() {
 
     std::string targetColor = "Red";
 
-    Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
+    //Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 
     while(true){

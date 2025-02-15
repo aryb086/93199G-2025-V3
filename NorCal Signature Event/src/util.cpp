@@ -137,7 +137,7 @@ void colorSort(void* param){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 2100;
+    int firstStopPosition = 2300;
     int secondStopPosition = 6000;
     int thirdStopPosition = 15500;
     int fourthStopPostion = 18000;

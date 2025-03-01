@@ -367,11 +367,20 @@ void blue_neg(){
 
     // touching ladder
     // chassis.turnToPoint(24, 13, 1000);
-    chassis.moveToPoint(24,13, 2000, {.forwards = false, .maxSpeed = 100}, false);
-    chassis.turnToPoint(15, 10, 1000);
-    chassis.moveToPoint(6,-3, 3000, {.forwards = true, .maxSpeed = 100}, false);
-    // rotationPosition = 1;
+    // chassis.moveToPoint(24,13, 2000, {.forwards = false, .maxSpeed = 100}, false);
+    // chassis.turnToPoint(15, 10, 1000);
+    // chassis.moveToPoint(6,-3, 3000, {.forwards = true, .maxSpeed = 100}, false);
+    // // rotationPosition = 1;
+    // pros::delay(200);
+    chassis.moveToPoint(24,13, 2000, {.forwards = false, .maxSpeed = 110}, false);
+    chassis.turnToPoint(44, -10, 1000);
+    intakePiston.set_value(HIGH);
+    chassis.moveToPoint(44,-10, 1000, {.forwards = true, .maxSpeed = 110}, false);
+    // rotationPosition = 2;
     pros::delay(200);
+    intakePiston.set_value(LOW);
+    chassis.turnToPoint(0, -20, 1000);
+    chassis.moveToPoint(20,-20, 3000, {.forwards = true, .maxSpeed = 80}, false);
 
     // // scoring 3rd ring onto mogo
     // chassis.turnToPoint(-23, 46, 1000);

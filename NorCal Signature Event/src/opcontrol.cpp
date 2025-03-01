@@ -59,10 +59,10 @@ bool lastAState = false;
 
 void intakeControl(bool dir){
         if(dir){
-            intake.move(127);
+            intake.move(120);
         }
         else{
-            intake.move(-127);
+            intake.move(-120);
         }
 }
 
@@ -136,7 +136,7 @@ void opcontrol() {
         if(currentR2State && !lastR2State){
             intakeRunning = !intakeRunning;
             if(intakeRunning){
-                intake.move(-127);
+                intake.move(-120);
             } 
             else {
                 intake.brake();

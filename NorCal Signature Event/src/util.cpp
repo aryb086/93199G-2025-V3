@@ -20,7 +20,7 @@ int arm_control(int startingPosition, int targetPosition, double kP, double kI, 
     int speed = 0;
     int timeout = 0;
 
-    while (abs(error) > errorRange && timeout < 1000) {  // Adjusted threshold and timeout
+    while (abs(error) > errorRange && timeout < 300) {  // Adjusted threshold and timeout
         // Proportional term
         int pTerm = error * kP;
 
@@ -115,11 +115,9 @@ void colorSort(void* param){
         std::string currentColor = detect_color();
         if(currentColor == targetColor){
             if(intake.get_target_velocity() > 0){
-                pros::delay(150);
-                intake.move(-127);
-                pros::delay(800);
+                pros::delay(135);
                 intake.move(0);
-                pros::delay(100);
+                pros::delay(200);
                 intake.move(127);
             }
         }
@@ -137,12 +135,12 @@ void colorSort(void* param){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 2300;
+    int firstStopPosition = 2750;
     int secondStopPosition = 6000;
-    int thirdStopPosition = 15500;
+    int thirdStopPosition = 16000;
     int fourthStopPostion = 18000;
     int fifthStopPostion = 25000;
-    int lastStopPosition = 100;
+    int lastStopPosition = 0;
 
     while (true) {
         int currentRotationPosition = *rotationPositionPtr; // Dereference each loop

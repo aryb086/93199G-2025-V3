@@ -6,6 +6,9 @@
 #include "pros/misc.h"
 
 int colorSelection = 0;
+int rotationPosition = -1;
+std::string targetColor = "Red";
+
 void aliianceColor(){
 	static int pressed = 0;
 	if(pressed == 0) {
@@ -14,6 +17,7 @@ void aliianceColor(){
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		colorSelection = 1;
 		pressed += 1;
+		targetColor = "Red";
 	}
 	else if(pressed == 1){
 		pros::lcd::clear_line(4);
@@ -21,6 +25,7 @@ void aliianceColor(){
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		colorSelection = 2;
 		pressed += 1;
+		targetColor = "Blue";
 	}
 	else{
 		pros::lcd::clear_line(4);
@@ -28,6 +33,7 @@ void aliianceColor(){
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		pressed = 0;
 		colorSelection = 0;
+		targetColor = "Red";
 	}
 
 }
@@ -85,6 +91,8 @@ void initialize() {
 	pros::lcd::initialize();
 	chassis.calibrate();
 	armSensor.set_position(0);
+	Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
+    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 	pros::Task screen_task([&]() {
         while (true) {
             // print robot location to the brain screen

@@ -400,7 +400,7 @@ void blue_neg(){
 
 }
 
-void skills(){
+void skills1(){
     // skills
     int rotationPosition = -1;
     std::string target = "Red";
@@ -496,6 +496,150 @@ void skills(){
     //filling up 3rd goal
     chassis.moveToPoint(40, 100, 4000, {.forwards = true}, false);
     chassis.moveToPoint(40, 85, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.turnToPoint(-36, 9, 1000);
+    chassis.moveToPoint(-36, 9, 4000, {.forwards = true, .maxSpeed = 90}, false);
+    delay(400);
+    chassis.turnToPoint(-33, -5, 1000);
+    chassis.moveToPoint(-33, -5, 4000, {.forwards = true, .maxSpeed = 60}, false);
+    delay(800);
+    //colorSortTask.remove();
+    chassis.turnToPoint(-55, 8, 1000);
+    chassis.moveToPoint(-55, 8, 2000, {.forwards = true, .maxSpeed = 60}, false);
+    delay(600);
+    chassis.moveToPoint(-60, 0, 1000, {.forwards = false, .maxSpeed = 80}, false);
+    delay(300);
+    clamp.set_value(LOW);
+    intake.move(0);
+
+    //get 4th goal
+    chassis.moveToPoint(-40, 10, 3000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-15, 13, 3000, {.forwards = false, .maxSpeed = 80}, false);
+    delay(100);
+    clamp.set_value(HIGH);
+    delay(200);
+    intake.move(127);
+
+    //second high stake
+    chassis.turnToPoint(-50, 32, 1000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.moveToPoint(-50, 32, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.turnToPoint(-50, 110, 1000);
+   
+
+    //fill up 4th goal put in corner
+    chassis.moveToPoint(-50, 110, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    delay(300);
+    chassis.moveToPoint(-50, 120, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    pros::delay(300);
+    intake.move(0);
+    chassis.moveToPoint(-65, 130, 2000, {.forwards = false, .maxSpeed = 110}, false);
+    clamp.set_value(LOW);
+    pros::delay(400);
+    chassis.moveToPoint(-40, 100, 4000, {.forwards = true, .maxSpeed = 80}, false);
+}
+
+void skills(){
+    // skills
+    rotationPosition = -1;
+    targetColor = "None";
+    //Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+    //Task colorSortTask(colorSort, &target, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
+
+    chassis.setPose(0, 0, 0);
+	// clamp.set_value(HIGH);
+	intake.move(127);
+	pros::delay(400);
+	intake.brake();
+
+	//go forward of alliance stake
+	chassis.moveToPoint(0,15, 1000, {.forwards = true, .maxSpeed = 100}, false);
+
+	//pick up first mogo
+    chassis.moveToPoint(24, 15, 3000, {.forwards = false, .maxSpeed = 100}, false);
+    pros::delay(100);
+	clamp.set_value(HIGH);
+	pros::delay(100);
+
+	//pick up first ring and put in goal and get second for ladybrown
+    intake.move(127);
+	chassis.moveToPoint(23,40, 3000, {.forwards = true, .maxSpeed = 100}, false);
+	chassis.moveToPoint(48,64.5, 3000, {.forwards = true, .maxSpeed = 100}, false);
+    rotationPosition = 0;
+    chassis.turnToPoint(50, 100, 1000); 
+    chassis.moveToPoint(50, 100, 2000, {.forwards = true, .maxSpeed = 80}, false);
+
+    //score on high stake
+    pros::delay(600);
+    chassis.moveToPoint(45,66, 3000, {.forwards = false, .maxSpeed = 80}, false);
+    chassis.turnToPoint(70, 66, 1000); 
+    intake.move(-60);
+    pros::delay(200);
+    rotationPosition = 1;
+    intake.move(127);
+    chassis.moveToPoint(70, 66, 1000, {.forwards = true, .maxSpeed = 60}, false);
+    rotationPosition = 5;
+    pros::delay(600);
+    chassis.moveToPoint(53,66, 3000, {.forwards = false, .maxSpeed = 80}, false);
+    rotationPosition = 3;
+    pros::delay(200);
+    rotationPosition = -1;
+    chassis.turnToPoint(53, 0, 1000);
+
+    //put goal in corner with 6 rings
+    chassis.moveToPoint(53,0, 3000, {.forwards = true, .maxSpeed = 65}, false);
+    delay(500);
+    chassis.turnToPoint(65, 20, 1000);
+    chassis.moveToPoint(65, 20, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    pros::delay(300);
+    chassis.turnToPoint(65, 5, 1000, {.forwards = false}, false);
+    chassis.moveToPoint(65, 5, 1000, {.forwards = false}, false);
+    clamp.set_value(LOW);
+
+    //grab second ring for alliance stake
+    rotationPosition = 0;
+    chassis.turnToPoint(53, 112, 1000);
+    chassis.moveToPoint(53, 112, 3000, {.forwards = true, .maxSpeed = 100}, true);
+    pros::delay(500);
+    
+    //grab mogo with blue ring
+    chassis.moveToPoint(20, 130, 2000, {.forwards = false, .maxSpeed = 70}, false);
+    clamp.set_value(HIGH);
+    pros::delay(100);
+
+    //put in corner
+    chassis.turnToPoint(70, 140, 1000, {.forwards = true, .maxSpeed = 90});
+    doinker2.set_value(HIGH);
+    chassis.moveToPoint(60, 130, 3000, {.forwards = true, .maxSpeed = 90}, false);
+    intake.move(0);
+    chassis.turnToPoint(90, 150, 1000, {.forwards = false, .maxSpeed = 70});
+    pros::delay(200);
+    doinker2.set_value(LOW);
+    chassis.moveToPoint(70, 130, 1000, {.forwards = false, .maxSpeed = 90}, false);
+    clamp.set_value(LOW);
+    pros::delay(200);
+    
+
+    //score on red alliance stake
+    chassis.moveToPoint(30, 115, 3000, {.forwards = true, .maxSpeed = 70}, false);
+    chassis.moveToPoint(13, 115, 3000, {.forwards = false, .maxSpeed = 70}, false);
+    delay(100);
+    clamp.set_value(HIGH);
+    delay(100);
+    chassis.turnToHeading(0, 1000);
+    chassis.moveToPoint(13, 125, 3000, {.forwards = true, .maxSpeed = 60}, false);
+    rotationPosition = 5;
+    pros::delay(400);
+    chassis.moveToPoint(13, 110, 3000, {.forwards = true, .maxSpeed = 60}, false);
+    rotationPosition = 3;
+    delay(200);
+    rotationPosition = -1;
+
+    //filling up 3rd goal
+    intake.move(127);
+    chassis.turnToPoint(45, 85, 1000);
+    chassis.moveToPoint(45, 85, 4000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.turnToPoint(50, 0, 1000);
+    chassis.moveToPoint(50, 0, 4000, {.forwards = true, .maxSpeed = 90}, false);
+    delay(200);
     chassis.turnToPoint(-36, 9, 1000);
     chassis.moveToPoint(-36, 9, 4000, {.forwards = true, .maxSpeed = 90}, false);
     delay(400);

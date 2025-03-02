@@ -83,6 +83,9 @@ void colorSort(void* param);
 void intake_piston(void);
 void doinker_control(void);
 void clamp_control(void);
+
+extern int rotationPosition;
+extern std::string targetColor;
 #ifdef __cplusplus
 }
 #endif

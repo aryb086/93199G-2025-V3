@@ -69,13 +69,9 @@ void intakeControl(bool dir){
 void opcontrol() {
     //clamp.set_value(HIGH);
     int colorPosition = 2;
-    int rotationPosition = 3;
+    rotationPosition = 3;
 
-    std::string targetColor = "Red";
-
-    //Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
-    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
-
+   
     while(true){
         //movement
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -103,7 +99,6 @@ void opcontrol() {
         bool currentRightState = controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT);
 
         bool intake_started = false;
-        // dataFwd = {true, targetColor};
 
         //color switcher
         if (currentAState && !lastAState) { 
@@ -169,6 +164,7 @@ void opcontrol() {
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
+                //intake.brake();
                 rotationPosition = 2;
             }
             else if (rotationPosition == 2) {

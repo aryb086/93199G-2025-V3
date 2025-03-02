@@ -8,7 +8,7 @@
 Controller controller(E_CONTROLLER_MASTER);
 MotorGroup left({11, -12, -6}, MotorGearset::blue);
 MotorGroup right({-3, 7, 8}, MotorGearset::blue);
-Motor intake(-17, MotorGearset::green);
+Motor intake(-17, MotorGearset::blue);
 Motor ladyBrown(-15, MotorGearset::red);
 ADIDigitalOut clamp('H');
 ADIDigitalOut intakePiston('F');
@@ -40,14 +40,14 @@ OdomSensors sensors(
 
 // input curve for throttle input during driver control
 lemlib::ExpoDriveCurve throttle_curve(3, // joystick deadband out of 127
-                                     10, // minimum output where drivetrain will move out of 127
-                                     1.019 // expo curve gain
+                                     20, // minimum output where drivetrain will move out of 127 //10
+                                     1.03 // expo curve gain //1.019
 );
 
 // input curve for steer input during driver control
 lemlib::ExpoDriveCurve steer_curve(3, // joystick deadband out of 127
-                                  10, // minimum output where drivetrain will move out of 127
-                                  1.019 // expo curve gain
+                                  20, // minimum output where drivetrain will move out of 127 /10
+                                  1.03 // expo curve gain //1.019
 );
 
 lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)

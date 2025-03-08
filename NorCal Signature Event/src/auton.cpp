@@ -621,15 +621,15 @@ void skills(){
     chassis.setPose(0, 0, 0);
 	// clamp.set_value(HIGH);
 	intake.move(127);
-	pros::delay(600);
+	pros::delay(500);
 	intake.brake();
 
 	//go forward of alliance stake
-	chassis.moveToPoint(0,11, 1000, {.forwards = true, .maxSpeed = 120}, false);
+	chassis.moveToPoint(0,11, 1000, {.forwards = true, .maxSpeed = 127}, false);
 
 	//pick up first mogo
     //chassis.turnToPoint(27, 11, 800, {.forwards = false, .maxSpeed = 100}, false);
-    chassis.moveToPoint(29, 13, 3000, {.forwards = false, .maxSpeed = 100}, false);
+    chassis.moveToPoint(29, 13, 3000, {.forwards = false, .maxSpeed = 110}, false);
     pros::delay(100);
 	clamp.set_value(HIGH);
 	pros::delay(100);
@@ -637,7 +637,7 @@ void skills(){
 	//pick up first ring and put in goal and get second for ladybrown
     intake.move(127);
 	chassis.moveToPoint(22,40, 3000, {.forwards = true, .maxSpeed = 120}, false);
-	chassis.moveToPoint(45,64.5, 3000, {.forwards = true, .maxSpeed = 120}, false);
+	chassis.moveToPoint(48,64.5, 3000, {.forwards = true, .maxSpeed = 120}, false);
     rotationPosition = 0;
     chassis.turnToPoint(50, 95, 500); 
     chassis.moveToPoint(50, 95, 2000, {.forwards = true, .maxSpeed = 110}, false);
@@ -659,12 +659,11 @@ void skills(){
 
     //put goal in corner with 6 rings
     intake.move(127);
-    chassis.moveToPoint(53,13, 3000, {.forwards = true, .maxSpeed = 80}, false);
+    chassis.moveToPoint(53,13, 3000, {.forwards = true, .maxSpeed = 90}, false);
     chassis.moveToPoint(53,-5, 3000, {.forwards = true, .maxSpeed = 110}, false);
-    chassis.turnToPoint(68, 13, 600);
-    chassis.moveToPoint(68, 13, 3000, {.forwards = true, .maxSpeed = 110}, false);
-    chassis.turnToPoint(65, 8, 600, {.forwards = false}, false);
-    chassis.moveToPoint(65, 8, 1000, {.forwards = false}, false);
+    chassis.turnToPoint(68, 16, 600);
+    chassis.moveToPoint(68, 16, 3000, {.forwards = true, .maxSpeed = 110}, false);
+    chassis.moveToPoint(65, 0, 1000, {.forwards = false}, false);
     clamp.set_value(LOW);
 
     //grab second ring for alliance stake
@@ -673,21 +672,20 @@ void skills(){
     chassis.moveToPoint(50, 115, 3000, {.forwards = true, .maxSpeed = 120}, false);
     
     //grab mogo with blue ring
-    chassis.moveToPoint(20, 130, 2000, {.forwards = false, .maxSpeed = 90}, false);
+    chassis.moveToPoint(30, 125, 2000, {.forwards = false, .maxSpeed = 90}, false);
     clamp.set_value(HIGH);
     pros::delay(100);
 
     //put in corner
-    chassis.turnToPoint(55, 133, 1000, {.forwards = true, .maxSpeed = 90}, true);
+    chassis.turnToPoint(60, 130, 1000, {.forwards = true, .maxSpeed = 90}, true);
     doinker2.set_value(HIGH);
-    chassis.moveToPoint(55, 133, 3000, {.forwards = true, .maxSpeed = 70}, false);
+    chassis.moveToPoint(60, 130, 3000, {.forwards = true, .maxSpeed = 70}, false);
     chassis.turnToPoint(90, 150, 1000, {.forwards = false, .maxSpeed = 110});
     pros::delay(200);
     doinker2.set_value(LOW);
     chassis.moveToPoint(70, 130, 1000, {.forwards = false, .maxSpeed = 90}, false);
     clamp.set_value(LOW);
     intake.move(0);
-    pros::delay(200);
     
 
     //score on blue alliance stake
@@ -697,7 +695,7 @@ void skills(){
     clamp.set_value(HIGH);
     delay(100);
     chassis.turnToHeading(0, 1000);
-    chassis.moveToPoint(9, 123, 3000, {.forwards = true, .maxSpeed = 60}, false);
+    chassis.moveToPoint(9, 121, 3000, {.forwards = true, .maxSpeed = 60}, false);
     intake.move(-60);
     rotationPosition = 5;
     pros::delay(800);
@@ -711,8 +709,8 @@ void skills(){
     // chassis.turnToPoint(10, 60, 1000);
     // chassis.moveToPoint(10, 60, 4000, {.forwards = true, .maxSpeed = 90}, false);
     // delay(200);
-    chassis.turnToPoint(-30, 15, 1000);
-    chassis.moveToPoint(-30, 15, 4000, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.turnToPoint(-30, 13, 1000);
+    chassis.moveToPoint(-30, 13, 4000, {.forwards = true, .maxSpeed = 100}, false);
     delay(200);
     chassis.turnToPoint(-53, 18, 1000);
     chassis.moveToPoint(-53, 18, 2000, {.forwards = true, .maxSpeed = 100}, false);

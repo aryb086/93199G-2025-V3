@@ -301,43 +301,41 @@ void red_neg(){
 void blue_pos(){
     lcd::print(7, "Blue Pos");
 
-    std::string target = "Blue";
-    int rotationPosition = -1;
-    //Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
-    // Task colorSortTask(colorSort, &target, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
+    chassis.setPose(57, -61, 90);
 
 
-
-
-    chassis.setPose(57, -22, 90);
-    chassis.moveToPoint(23,-23, 1000, {.forwards = false, .maxSpeed = 70}, false);
-    pros::delay(500);
+    // rushing the mogo, lady browning it and tipping it
+    chassis.moveToPoint(14,-57, 1000, {.forwards = false, .maxSpeed = 127}, false);
+    pros::delay(100);
+    chassis.turnToPoint(0, -47, 100, {.forwards = true, .maxSpeed = 127}, false);
+    doinker2.set_value(HIGH);
+    chassis.moveToPoint(48,-60, 1000, {.forwards = true, .maxSpeed = 127}, false);
+    doinker2.set_value(LOW);
+    chassis.turnToPoint(69, -65, 200, {.forwards = true, .maxSpeed = 127}, false);
+    chassis.moveToPoint(37,-54, 700, {.forwards = true, .maxSpeed = 127}, false);
     clamp.set_value(HIGH);
-    pros::delay(500);
-    chassis.turnToPoint(23, -46, 1000, {.forwards = true, .maxSpeed = 75}, false);
     intake.move(127);
-    chassis.moveToPoint(23,-46, 1000, {.forwards = true, .maxSpeed = 90}, false);
+    chassis.turnToPoint(66, -66, 100, {.forwards = true, .maxSpeed = 127}, false);
+    chassis.moveToPoint(66,-66, 800, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.moveToPoint(56,-59, 200, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.turnToPoint(23, -47, 200, {.forwards = true, .maxSpeed = 127}, false);
+    clamp.set_value(LOW);
+    chassis.moveToPoint(21,-45, 1000, {.forwards = true, .maxSpeed = 100}, false);
+    intake.move(0);
+    chassis.turnToPoint(21, -69, 300, {.forwards = true, .maxSpeed = 127}, false);
 
 
-	// clamp.set_value(HIGH);
 
-    // // rushing the mogo, lady browning it and tipping it
-    // rotationPosition = 0;
-    // intake.move(127);
-    // chassis.moveToPoint(10,-55, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    // pros::delay(100);
-    // chassis.turnToPoint(6.5, -52.25, 100, {.forwards = true, .maxSpeed = 75}, false);
-    // chassis.moveToPoint(6.5,-52.25, 1000, {.forwards = true, .maxSpeed = 90}, false);
-    // intake.move(-100);
-    // pros::delay(100);
-    // // doinker.set_value(HIGH);
-    // rotationPosition = 5;
-    // pros::delay(1500);
-    // chassis.moveToPoint(20,-55, 1000, {.forwards = false, .maxSpeed = 90}, false);
-    // chassis.turnToPoint(-5, -61, 1500);
-    // pros::delay(2000);
-    // rotationPosition = 3;
-    // pros::delay(500);
+
+    pros::delay(100);
+    // doinker.set_value(HIGH);
+    rotationPosition = 5;
+    pros::delay(1500);
+    chassis.moveToPoint(20,-55, 1000, {.forwards = false, .maxSpeed = 90}, false);
+    chassis.turnToPoint(-5, -61, 1500);
+    pros::delay(2000);
+    rotationPosition = 3;
+    pros::delay(500);
 
 
     // // getting first ring

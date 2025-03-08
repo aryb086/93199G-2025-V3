@@ -49,12 +49,18 @@ void negPos(){
 		negPositiveSelection = 1;
 		pressed += 1;
 	}
-	else{
+	else if(pressed == 1){
 		pros::lcd::clear_line(5);
 		pros::lcd::set_text(5, "---------------Postive--------------");
 		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
-		pressed = 0;
+		pressed += 1;
+		negPositiveSelection = 2;
+	}
+	else{
+		pros::lcd::clear_line(5);
+		pros::lcd::set_text(5, "--------------Solo AWP--------------");
 		negPositiveSelection = 0;
+		pressed = 0;
 	}
 
 }
@@ -147,19 +153,25 @@ void competition_initialize() {
  */
 void autonomous() {
 	if(colorSelection == 1){
-		if(negPositiveSelection == 0){
+		if(negPositiveSelection == 1){
 			red_pos();
 		}
-		else{
+		else if (negPositiveSelection == 2){
 			red_neg();
+		}
+		else if (negPositiveSelection == 0){
+			red_solo_awp();
 		}
 	}
 	else if (colorSelection == 2){
-		if(negPositiveSelection == 0){
+		if(negPositiveSelection == 1){
 			blue_pos();
 		}
-		else{
+		else if (negPositiveSelection == 2){
 			blue_neg();
+		}
+		else if (negPositiveSelection == 0){
+			blue_solo_awp();
 		}
 	}
 	else{

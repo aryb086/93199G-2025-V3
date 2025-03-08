@@ -59,17 +59,18 @@ bool lastAState = false;
 
 void intakeControl(bool dir){
         if(dir){
-            intake.move(120);
+            intake.move(120); //120 for skills, 100 for team
         }
         else{
-            intake.move(-120);
+            intake.move(-120); // -120
         }
 }
 
 void opcontrol() {
     //clamp.set_value(HIGH);
     int colorPosition = 2;
-    rotationPosition = 3;
+    rotationPosition = -1;
+    armSensor.set_position(3000);
 
    
     while(true){
@@ -160,21 +161,31 @@ void opcontrol() {
                 rotationPosition = 0;
             }
             else if (rotationPosition == 0) {
-                intake.move(-40);
+                intake.move(-80);
+                pros::delay(50);
+                intake.move(0);
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
                 //intake.brake();
+                intake.move(-80);
+                pros::delay(50);
+                intake.move(0);
                 rotationPosition = 2;
             }
             else if (rotationPosition == 2) {
+                intake.move(-80);
+                pros::delay(50);
+                intake.move(0);
                 rotationPosition = 3;
             }
         }
 
         if (currentL2State && !lastL2State) { 
             if (rotationPosition == -1 || rotationPosition == 0) {
-                intake.move(-40);
+                intake.move(-80);
+                pros::delay(25);
+                intake.move(0);
                 rotationPosition = 4;
             }
             else if (rotationPosition == 4) {

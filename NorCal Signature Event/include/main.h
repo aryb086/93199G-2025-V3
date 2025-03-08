@@ -65,6 +65,8 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
+void red_solo_awp(void);
+void blue_solo_awp(void);
 void red_neg(void);
 void red_pos(void);
 void blue_neg(void);

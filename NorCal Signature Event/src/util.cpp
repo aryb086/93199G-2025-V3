@@ -115,10 +115,10 @@ void colorSort(void* param){
         std::string currentColor = detect_color();
         if(currentColor == targetColor){
             if(intake.get_target_velocity() > 0){
-                pros::delay(135);
+                pros::delay(175);
                 intake.move(0);
                 pros::delay(200);
-                intake.move(127);
+                intake.move(100);
             }
         }
         pros::delay(20);
@@ -135,11 +135,11 @@ void colorSort(void* param){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 2750;
-    int secondStopPosition = 6000;
-    int thirdStopPosition = 16000;
-    int fourthStopPostion = 18000;
-    int fifthStopPostion = 25000;
+    int firstStopPosition = 3000; //2750
+    int secondStopPosition = 10000;
+    int thirdStopPosition = 16500; // 15000
+    int fourthStopPostion = 18000; //18000
+    int fifthStopPostion = 27000; //27000
     int lastStopPosition = 0;
 
     while (true) {
@@ -147,13 +147,13 @@ void ladyBrownControl(void* param) {
         int currentPosition = armSensor.get_position();
 
         if (currentRotationPosition == 0) {
-            currentPosition = arm_control(currentPosition, firstStopPosition, 0.025, 0.0, 0.02, 800);
+            currentPosition = arm_control(currentPosition, firstStopPosition, 0.02, 0.0, 0.02, 400);
             ladyBrown.brake();
             currentRotationPosition = 1;
         } else if (currentRotationPosition == 1) {
-            currentPosition = arm_control(currentPosition, secondStopPosition, 0.03, 0.001, 0.04, 1500);
+            currentPosition = arm_control(currentPosition, secondStopPosition, 0.018, 0.001, 0.04, 800);
         } else if (currentRotationPosition == 2) {
-            currentPosition = arm_control(currentPosition, thirdStopPosition, 0.015, 0.0, 0.04, 800);
+            currentPosition = arm_control(currentPosition, thirdStopPosition, 0.023, 0.0, 0.04, 1500);
         } else if (currentRotationPosition == 3) {
             currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 400);
             ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -164,7 +164,7 @@ void ladyBrownControl(void* param) {
             currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
         }
         else if (currentRotationPosition == 5) {
-            currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 1500);
+            currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 800);
             ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
             ladyBrown.brake();
         }

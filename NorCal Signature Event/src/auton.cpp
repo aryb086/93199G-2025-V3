@@ -425,9 +425,20 @@ void blue_pos(){
     chassis.moveToPoint(9,-17, 1000,  {.forwards = true, .maxSpeed = 100}, false);
     doinker.set_value(HIGH);
     chassis.moveToPoint(23,-30, 1000, {.forwards = false, .maxSpeed = 100}, false);
+    doinker.set_value(LOW);
     rotationPosition = 2;
     chassis.moveToPoint(10,-14, 1000, {.forwards = true, .maxSpeed = 127}, false);
 
+    //doinker 2nd blue ring from center and scoring it
+    chassis.turnToPoint(-3,0, 600, {.forwards = true, .maxSpeed = 127}, false);
+    chassis.moveToPoint(9,-13, 1000,  {.forwards = true, .maxSpeed = 100}, false);
+    doinker.set_value(HIGH);
+    chassis.moveToPoint(24,-26, 1000,  {.forwards = false, .maxSpeed = 127}, false);
+    rotationPosition = 2;
+    chassis.moveToPoint(16,-16, 1000,  {.forwards = true, .maxSpeed = 127}, false);
+
+
+	
 
     pros::delay(200);
 
@@ -478,27 +489,52 @@ void blue_neg(){
     chassis.moveToPoint(45,-10, 1300, {.forwards = true, .maxSpeed = 100}, false);
     chassis.moveToPoint(48,20, 500, {.forwards = false, .maxSpeed = 60}, false);
 
-    //getting 5th ring
-    chassis.turnToPoint(60, 35, 500);  
-    chassis.moveToPoint(60, 35, 500);  
-    chassis.swingToPoint(61,60, lemlib::DriveSide::RIGHT, 600, {.forwards = true, .maxSpeed = 90}, false);
-    chassis.moveToPoint(61, 90, 1400);
-    chassis.turnToPoint(57, 90, 500);  
-    chassis.moveToPoint(57,90, 500, {.forwards = true, .maxSpeed = 60}, false);
-
-    chassis.moveToPoint(39,39, 700, {.forwards = false, .maxSpeed = 80}, false);
-    chassis.turnToPoint(6, 10, 500);  
-    chassis.moveToPoint(6,10, 700, {.forwards = true, .maxSpeed = 80}, false);
+    //getting 5th ring from center of field 
+    chassis.moveToPoint(13, 20, 700, {.forwards = true, .maxSpeed = 127}, false);
+    chassis.turnToPoint(-4, 0, 500);  
+    chassis.moveToPoint(9, 12, 700, {.forwards = true, .maxSpeed = 127}, false);
+    doinker.set_value(HIGH);
+    chassis.moveToPoint(15, 18, 1000, {.forwards = false, .maxSpeed = 127}, false);
+    doinker.set_value(LOW);
+	
+    //getting 6th ring from center of field
+    chassis.turnToPoint(-3, -3, 800);  
+    chassis.moveToPoint(10,5, 1300, {.forwards = true, .maxSpeed = 100}, false);
+    doinker.set_value(HIGH);
+    chassis.moveToPoint(28, 17, 1300, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.moveToPoint(17, 9, 1300, {.forwards = false, .maxSpeed = 100}, false);
     rotationPosition = 2;
-    pros::delay(200);
+    pros::delay(100);
+
+	
+    // //getting 5th ring
+    // chassis.turnToPoint(60, 35, 500);  
+    // chassis.moveToPoint(60, 35, 500);  
+    // chassis.swingToPoint(61,60, lemlib::DriveSide::RIGHT, 600, {.forwards = true, .maxSpeed = 90}, false);
+    // chassis.moveToPoint(61, 90, 1400);
+    // chassis.turnToPoint(57, 90, 500);  
+    // chassis.moveToPoint(57,90, 500, {.forwards = true, .maxSpeed = 60}, false);
+
+    // chassis.moveToPoint(39,39, 700, {.forwards = false, .maxSpeed = 80}, false);
+    // chassis.turnToPoint(6, 10, 500);  
+    // chassis.moveToPoint(6,10, 700, {.forwards = true, .maxSpeed = 80}, false);
+    // rotationPosition = 2;
+    // pros::delay(200);
 
 
 
-    // IF 5TH RING DOES NOT WORK, USE THIS 
-    chassis.turnToPoint(60, 35, 500);  
-    chassis.moveToPoint(60, 35, 500);  
-    chassis.swingToPoint(61,60, lemlib::DriveSide::RIGHT, 600, {.forwards = true, .maxSpeed = 90}, false);
-    chassis.moveToPoint(61, 90, 1400);
+    // // IF 5TH RING DOES NOT WORK, USE THIS 
+    // chassis.turnToPoint(60, 35, 500);  
+    // chassis.moveToPoint(60, 35, 500);  
+    // chassis.swingToPoint(61,60, lemlib::DriveSide::RIGHT, 600, {.forwards = true, .maxSpeed = 90}, false);
+    // doinker.set_value(HIGH);
+    // chassis.moveToPoint(61,90, 1300, {.forwards = true, .maxSpeed = 100}, false);
+    // chassis.turnToPoint(44, 90, 500);
+    // doinker.set_value(LOW);
+    // chassis.moveToPoint(61,90, 800, {.forwards = true, .maxSpeed = 80}, false);
+
+
+
 
 
 

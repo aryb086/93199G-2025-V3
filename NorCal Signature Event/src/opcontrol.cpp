@@ -68,9 +68,11 @@ void intakeControl(bool dir){
 
 void opcontrol() {
     //clamp.set_value(HIGH);
-    int colorPosition = 2;
-    rotationPosition = -1;
-    armSensor.set_position(3000);
+    int colorPosition = 0;
+    targetColor = "None";
+    rotationPosition = 0;
+    armSensor.set_position(3000); //3000
+    //rotationPosition = 3;
 
    
     while(true){
@@ -160,29 +162,28 @@ void opcontrol() {
             if (rotationPosition == -1) {
                 rotationPosition = 0;
             }
-            else if (rotationPosition == 0) {
-                intake.move(-80);
+            else if (rotationPosition == 0 || rotationPosition == 6) {
+                intake.move(-127);
                 pros::delay(50);
                 intake.move(0);
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
-                //intake.brake();
-                intake.move(-80);
+                intake.move(-127);
                 pros::delay(50);
                 intake.move(0);
                 rotationPosition = 2;
             }
             else if (rotationPosition == 2) {
-                intake.move(-80);
-                pros::delay(50);
-                intake.move(0);
+                //intake.move(-127);
+                //pros::delay(50);
+                //intake.move(0);
                 rotationPosition = 3;
             }
         }
 
         if (currentL2State && !lastL2State) { 
-            if (rotationPosition == -1 || rotationPosition == 0) {
+            if (rotationPosition == -1 || rotationPosition == 0 || rotationPosition == 6) {
                 intake.move(-80);
                 pros::delay(25);
                 intake.move(0);
@@ -201,7 +202,7 @@ void opcontrol() {
         }
 
         if(currentYState && !lastYState){
-            rotationPosition = 0;
+            rotationPosition = 3;
         }
 
         //intake piston

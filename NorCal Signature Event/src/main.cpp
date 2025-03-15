@@ -7,6 +7,7 @@
 
 int colorSelection = 0;
 int rotationPosition = -1;
+//int rotationPosition2 = 0;
 std::string targetColor = "Red";
 
 void aliianceColor(){
@@ -99,6 +100,8 @@ void initialize() {
 	armSensor.set_position(0);
 	Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+	//Task ladybrownTask2(ladyBrownControl2, &rotationPosition2, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+
 	pros::Task screen_task([&]() {
         while (true) {
             // print robot location to the brain screen

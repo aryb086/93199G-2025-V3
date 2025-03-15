@@ -6,8 +6,8 @@
 #include "pros/optical.hpp"
 
 Controller controller(E_CONTROLLER_MASTER);
-MotorGroup left({11, -12, -6}, MotorGearset::blue);
-MotorGroup right({-3, 7, 8}, MotorGearset::blue);
+MotorGroup left({11, -7, -6}, MotorGearset::blue);
+MotorGroup right({-3, 12, 8}, MotorGearset::blue);
 Motor intake(-17, MotorGearset::blue);
 Motor ladyBrown(-15, MotorGearset::red);
 ADIDigitalOut clamp('H');

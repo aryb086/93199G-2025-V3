@@ -3,6 +3,7 @@
 #include "lemlib/api.hpp"
 #include "pros/imu.h"
 #include "pros/imu.hpp"
+#include "pros/motor_group.hpp"
 #include "pros/motors.h"
 #include "pros/optical.hpp"
 using namespace pros;
@@ -12,6 +13,8 @@ extern Controller controller;
 extern Chassis chassis;
 extern Motor intake;
 extern Motor ladyBrown;
+extern MotorGroup left;
+extern MotorGroup right;
 extern ADIDigitalOut clamp;
 extern ADIDigitalOut intakePiston;
 extern ADIDigitalOut doinker;

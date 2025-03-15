@@ -85,8 +85,11 @@ void colorSort(void* param);
 void intake_piston(void);
 void doinker_control(void);
 void clamp_control(void);
+void timeDrive(int time);
 
 extern int rotationPosition;
+extern int rotationPosition2;
+
 extern std::string targetColor;
 #ifdef __cplusplus
 }

@@ -688,23 +688,23 @@ void skills(){
 
 	//pick up first ring and put in goal and get second for ladybrown
     intake.move(127);
-	chassis.moveToPoint(22,35, 3000, {.forwards = true, .maxSpeed = 120}, false);
-	chassis.moveToPoint(46,57, 3000, {.forwards = true, .maxSpeed = 120}, false);
+	chassis.moveToPoint(25,35, 3000, {.forwards = true, .maxSpeed = 120}, false);
+	chassis.moveToPoint(46,50, 3000, {.forwards = true, .maxSpeed = 120}, false);
     rotationPosition = 0;
     chassis.turnToPoint(52, 95, 500); 
     chassis.moveToPoint(52, 95, 2000, {.forwards = true, .maxSpeed = 115}, false);
 
     //score on high stake
-    chassis.moveToPoint(46,60, 3000, {.forwards = false, .maxSpeed = 110}, false);
-    chassis.turnToPoint(70, 60, 600, {}, false); 
+    chassis.moveToPoint(46,60.8, 3000, {.forwards = false, .maxSpeed = 110}, false);
+    chassis.turnToPoint(70, 60.8, 600, {}, false); 
     intake.move(-80);
     rotationPosition = 1;
     pros::delay(200);
     intake.move(100);
-    chassis.moveToPoint(70, 60, 1000, {.forwards = true, .maxSpeed = 60}, false);
+    chassis.moveToPoint(70, 60.8, 1000, {.forwards = true, .maxSpeed = 60}, false);
     rotationPosition = 5;
     pros::delay(600);
-    chassis.moveToPoint(55,60 , 3000, {.forwards = false, .maxSpeed = 120}, false);
+    chassis.moveToPoint(55,60.8, 3000, {.forwards = false, .maxSpeed = 120}, false);
     rotationPosition = 3;
     chassis.turnToPoint(55, -3, 800);
 
@@ -717,7 +717,7 @@ void skills(){
     chassis.turnToPoint(68, 16, 600);
     chassis.moveToPoint(68, 16, 3000, {.forwards = true, .maxSpeed = 110}, false);
     pros::delay(100);
-    chassis.moveToPoint(63, 0, 1000, {.forwards = false}, false);
+    chassis.moveToPoint(66, 0, 1000, {.forwards = false}, false);
     clamp.set_value(LOW);
 
     //grab second ring for alliance stake
@@ -733,7 +733,7 @@ void skills(){
     //put in corner
     chassis.turnToPoint(60, 134, 1000, {.forwards = true, .maxSpeed = 90}, true);
     doinker2.set_value(HIGH);
-    chassis.moveToPoint(60, 130, 3000, {.forwards = true, .maxSpeed = 100}, false);
+    chassis.moveToPoint(60, 130, 2000, {.forwards = true, .maxSpeed = 110}, false);
     chassis.turnToPoint(90, 150, 1000, {.forwards = false, .maxSpeed = 110});
     pros::delay(200);
     doinker2.set_value(LOW);
@@ -743,8 +743,10 @@ void skills(){
     
 
     //score on blue alliance stake
-    chassis.moveToPoint(30, 113, 3000, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.moveToPoint(8, 113, 3000, {.forwards = false, .maxSpeed = 100}, false);
+    //intake.move(-127);
+    chassis.moveToPoint(30, 113, 3000, {.forwards = true, .maxSpeed = 110}, false);
+    intake.move(0);
+    chassis.moveToPoint(8, 113, 3000, {.forwards = false, .maxSpeed = 90}, false);
     delay(100);
     clamp.set_value(HIGH);
     delay(100);
@@ -787,15 +789,15 @@ void skills(){
     chassis.moveToPoint(-53, 40, 4000, {.forwards = true, .maxSpeed = 110}, false);
     chassis.turnToPoint(-40, 60, 600, {}, false);
     chassis.moveToPoint(-40, 60, 2000, {.forwards = true}, false);
-    chassis.turnToPoint(-70, 58, 600);
+    chassis.turnToPoint(-70, 59, 600);
     intake.move(-80);
     rotationPosition = 1;
     pros::delay(200);
     intake.move(127);
-    chassis.moveToPoint(-65, 58, 1000, {.maxSpeed = 60}, false);
+    chassis.moveToPoint(-65, 59, 1000, {.maxSpeed = 60}, false);
     rotationPosition = 5;
     pros::delay(600);
-    chassis.moveToPoint(-45, 58, 2000, {.forwards = false}, false);
+    chassis.moveToPoint(-45, 59, 2000, {.forwards = false}, false);
     rotationPosition = 3;
    
 
@@ -803,24 +805,24 @@ void skills(){
     targetColor = "Red";
     chassis.turnToPoint(-48, 85, 600, {.forwards = true}, false);
     chassis.moveToPoint(-48, 85, 4000, {.forwards = true}, false);
-    chassis.turnToPoint(-15, 85, 600, {.forwards = true}, false);
-    chassis.moveToPoint(-15, 85, 4000, {.forwards = true}, false);
-    chassis.turnToPoint(-48, 109, 600, {.forwards = true, .maxSpeed = 80}, false);
-    chassis.moveToPoint(-48, 109, 4000, {.forwards = true}, false);
+    chassis.turnToPoint(-18, 88, 600, {.forwards = true}, false);
+    chassis.moveToPoint(-18, 88, 4000, {.forwards = true}, false);
+    chassis.turnToPoint(-46, 109, 800, {.forwards = true, .maxSpeed = 70}, false);
+    chassis.moveToPoint(-46, 109, 4000, {.forwards = true}, false);
     chassis.turnToPoint(-65, 109, 400, {.forwards = true}, false);
-    chassis.moveToPoint(-65, 109, 4000, {.forwards = true}, false);
-    chassis.turnToPoint(-50, 125, 400, {.forwards = true}, false);
-    chassis.moveToPoint(-50, 125, 4000, {.forwards = true}, false);
+    chassis.moveToPoint(-65, 109, 2000, {.forwards = true}, false);
+    chassis.turnToPoint(-50, 128, 400, {.forwards = true}, false);
+    chassis.moveToPoint(-50, 128, 4000, {.forwards = true}, false);
     delay(200);
-    chassis.turnToPoint(-20, 125, 600, {.forwards = false, .maxSpeed = 80}, false);
+    chassis.turnToPoint(-20, 125, 600, {.forwards = false, .maxSpeed = 70}, false);
     chassis.moveToPoint(-20, 125, 1000, {.forwards= false});
-    chassis.turnToPoint(-65, 135, 600, {.forwards = false}, false);
-    clamp.set_value(LOW);
-    //doinker.set_value(HIGH);
+    chassis.turnToPoint(-65, 135, 600, {.forwards = true}, false);
+    doinker.set_value(HIGH);
     intake.move(0);
-    chassis.moveToPoint(-60, 135, 1000, {.forwards = false}, false);
-    //chassis.turnToPoint(-60, 130, 1000, {.forwards = false}, false);
-    //doinker.set_value(LOW);
+    chassis.moveToPoint(-60, 135, 1000, {.forwards = true}, false);
+    chassis.turnToPoint(-60, 140, 1000, {.forwards = false}, false);
+    doinker.set_value(LOW);
+    clamp.set_value(LOW);
     chassis.moveToPoint(-60, 140, 1000, {.forwards = false}, false);
     
     delay(100);

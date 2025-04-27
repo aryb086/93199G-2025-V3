@@ -69,10 +69,10 @@ void intakeControl(bool dir){
 void opcontrol() {
     //clamp.set_value(HIGH);
     int colorPosition = 0;
-    targetColor = "None";
-    rotationPosition = 0;
-    armSensor.set_position(3000); //3000
-    //rotationPosition = 3;
+    targetColor = "Blue";
+    //rotationPosition = 0;
+    //armSensor.set_position(3000); //3000
+    rotationPosition = 3;
 
    
     while(true){
@@ -202,7 +202,7 @@ void opcontrol() {
         }
 
         if(currentYState && !lastYState){
-            rotationPosition = 3;
+            rotationPosition = 6;
         }
 
         //intake piston

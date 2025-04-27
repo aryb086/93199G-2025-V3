@@ -72,6 +72,7 @@ void red_pos(void);
 void blue_neg(void);
 void blue_pos(void);
 void skills(void);
+void PID_tuning(void);
 int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD, int errorRange = 200);
 int arm_control2(int targetPosition, int speed, int minError);
 void ladyBrownControl(void* param);

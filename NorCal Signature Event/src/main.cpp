@@ -13,24 +13,24 @@ std::string targetColor = "Red";
 void aliianceColor(){
 	static int pressed = 0;
 	if(pressed == 0) {
-		pros::lcd::clear_line(4);
-		pros::lcd::set_text(4, "--------------Color: Red------------");
+		pros::lcd::clear_line(1);
+		pros::lcd::set_text(1, "--------------Color: Red------------");
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		colorSelection = 1;
 		pressed += 1;
 		targetColor = "Red";
 	}
 	else if(pressed == 1){
-		pros::lcd::clear_line(4);
-		pros::lcd::set_text(4, "-----------Color: Blue-----------");
+		pros::lcd::clear_line(1);
+		pros::lcd::set_text(1, "-----------Color: Blue-----------");
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		colorSelection = 2;
 		pressed += 1;
 		targetColor = "Blue";
 	}
 	else{
-		pros::lcd::clear_line(4);
-		pros::lcd::set_text(4, "---------------Skills---------------");
+		pros::lcd::clear_line(1);
+		pros::lcd::set_text(1, "---------------Skills---------------");
 		//pros::lcd::print(4, "Color: %i", colorSelection);
 		pressed = 0;
 		colorSelection = 0;
@@ -44,22 +44,22 @@ int negPositiveSelection = 0;
 void negPos(){
 	static int pressed = 0;
 	if(pressed == 0) {
-		pros::lcd::clear_line(5);
-		pros::lcd::set_text(5, "--------------Negative--------------");
+		pros::lcd::clear_line(2);
+		pros::lcd::set_text(2, "--------------Negative--------------");
 		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
 		negPositiveSelection = 1;
 		pressed += 1;
 	}
 	else if(pressed == 1){
-		pros::lcd::clear_line(5);
-		pros::lcd::set_text(5, "---------------Postive--------------");
+		pros::lcd::clear_line(2);
+		pros::lcd::set_text(2, "---------------Postive--------------");
 		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
 		pressed += 1;
 		negPositiveSelection = 2;
 	}
 	else{
-		pros::lcd::clear_line(5);
-		pros::lcd::set_text(5, "--------------Solo AWP--------------");
+		pros::lcd::clear_line(2);
+		pros::lcd::set_text(2, "--------------Solo AWP--------------");
 		negPositiveSelection = 0;
 		pressed = 0;
 	}
@@ -77,12 +77,12 @@ void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::clear_line(6);
-		pros::lcd::set_text(6, "-----Press Again To Confirm Selection----");
+		pros::lcd::clear_line(3);
+		pros::lcd::set_text(3, "-----Press Again To Confirm Selection----");
 		//pros::lcd::print(6, "NegPos: %d", negPositiveSelection);
 	} else {
-		pros::lcd::clear_line(6);
-		pros::lcd::set_text(6, "---------Selection Confirmed-------");
+		pros::lcd::clear_line(3);
+		pros::lcd::set_text(3, "---------Selection Confirmed-------");
 		//pros::lcd::print(6, "NegPos: %d", negPositiveSelection);
 		selectionConfirmed = true;
 	}
@@ -96,11 +96,13 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
+	imu.reset(true);
 	chassis.calibrate();
 	armSensor.set_position(0);
 	Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 	//Task ladybrownTask2(ladyBrownControl2, &rotationPosition2, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+
 
 	pros::Task screen_task([&]() {
         while (true) {
@@ -112,6 +114,7 @@ void initialize() {
             pros::delay(20);
         }
     });
+	blue_pos();
 }
 
 /**
@@ -178,7 +181,7 @@ void autonomous() {
 		}
 	}
 	else{
-		skills();
+		PID_tuning();
 	}
 }
 

@@ -115,10 +115,10 @@ void colorSort(void* param){
         std::string currentColor = detect_color();
         if(currentColor == targetColor){
             if(intake.get_target_velocity() > 0){
-                pros::delay(175);
+                pros::delay(150);
                 intake.move(0);
                 pros::delay(200);
-                intake.move(100);
+                intake.move(127);
             }
         }
         pros::delay(20);

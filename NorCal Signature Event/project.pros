@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Matches",
+    "project_name": "tEST",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -298,8 +298,8 @@
       }
     },
     "upload_options": {
-      "icon": "ufo",
-      "slot": 1
+      "icon": "planet",
+      "slot": 5
     },
     "use_early_access": false
   }

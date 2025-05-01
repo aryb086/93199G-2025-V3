@@ -24,6 +24,7 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
+#include "main.h"
 #define PROS_USE_SIMPLE_NAMES
 /**
  * If defined, C++ literals will be available for use. All literals are in the
@@ -74,9 +75,12 @@ void blue_pos(void);
 void skills(void);
 void PID_tuning(void);
 int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD, int errorRange = 200);
-int arm_control2(int targetPosition, int speed, int minError);
 void ladyBrownControl(void* param);
-void ladyBrownControl2(void* param);
+void ladyBrownGoToPosition(int targetPosition, int speed);
+void ladyBrownGoToBase(int speed);
+void ladyBrownGoToPositionPID(int targetPosition, double kp, int errorRange);
+void rollbackAndStopIntake();
+void displayArmPosition();
 
 void intake_forward(void);
 void intake_backward(void);
@@ -89,7 +93,7 @@ void clamp_control(void);
 void timeDrive(int time);
 
 extern int rotationPosition;
-extern int rotationPosition2;
+extern double basePosition;
 
 extern std::string targetColor;
 #ifdef __cplusplus

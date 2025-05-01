@@ -11,12 +11,12 @@
 
 void PID_tuning(){
 
-    chassis.setPose(58, 36, 270);
+    chassis.setPose(58, -58, 270);
     pros::lcd::print(3, "TUNING"); // heading
 
-    // chassis.turnToPoint(60, 0, 1000);
+    chassis.turnToPoint(58, -23, 1000);
 
-    chassis.moveToPoint(0,36, 1400, {.forwards = true, .maxSpeed = 100}, false);
+    // chassis.moveToPoint(37,-58, 1000, {.forwards = true, .maxSpeed = 127}, false);
 
     pros::delay(200);
     
@@ -520,13 +520,17 @@ void blue_pos(){
     chassis.setPose(51, -60, 270);
 
     //rushing stake
-    doinker.set_value(HIGH);x
-    chassis.moveToPoint(13 ,-45, 1000, {.forwards = true, .maxSpeed = 100}, true);
-    pros::delay(450);
-    chassis.moveToPoint(32,-60, 1400, {.forwards = false, .maxSpeed = 70}, false);
-    doinker.set_value(LOW);
-    pros::delay(300);
-    chassis.turnToPoint(-20,-45, 1000, {.forwards = true, .maxSpeed = 80}, false);
+    doinker.set_value(HIGH);
+    chassis.moveToPoint(13 ,-56, 600, {.forwards = true, .maxSpeed = 127}, false);
+    chassis.turnToPoint(-11 , -1, 200);  
+    chassis.moveToPoint(8 ,0, 200, {.forwards = true, .maxSpeed = 90}, false);
+    pros::delay(200);
+    chassis.moveToPoint(37 ,-60, 600, {.forwards = false, .maxSpeed = 80}, false);
+
+    // pros::delay(450);
+    // doinker.set_value(LOW);
+    // pros::delay(300);
+    // chassis.turnToPoint(-20,-45, 1000, {.forwards = true, .maxSpeed = 80}, false);
 
 
     // //clamp first mogo and scoring preload
@@ -652,7 +656,7 @@ void skills1(){
     // skills
     int rotationPosition = -1;
     std::string target = "Red";
-    Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
+    //Task ladybrownTask(ladyBrownControl, &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
     //Task colorSortTask(colorSort, &target, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
 
     chassis.setPose(0, 0, 0);

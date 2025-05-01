@@ -11,7 +11,7 @@ MotorGroup right({9,-6, 2}, MotorGearset::blue);
 Motor front_intake(-11, MotorGearset::blue);
 
 Motor back_intake(18, MotorGearset::blue);
-Motor ladyBrown(19, MotorGearset::red);
+Motor ladyBrown(19, MotorGearset::green);
 ADIDigitalOut clamp('H');
 ADIDigitalOut intakePiston('F');
 ADIDigitalOut doinker('G');

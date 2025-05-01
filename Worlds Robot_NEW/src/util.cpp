@@ -20,7 +20,7 @@ int arm_control(int startingPosition, int targetPosition, double kP, double kI, 
     int speed = 0;
     int timeout = 0;
 
-    while (abs(error) > errorRange && timeout < 300) {  // Adjusted threshold and timeout
+    while (abs(error) > errorRange ) {  // Adjusted threshold and timeout && timeout < 1000
         // Proportional term
         int pTerm = error * kP;
 
@@ -42,15 +42,16 @@ int arm_control(int startingPosition, int targetPosition, double kP, double kI, 
         if (speed < -127) speed = -127;
 
         // Move the motor
-        ladyBrown.move(speed*-1);
+        ladyBrown.move(speed*-1 );
+        
 
         // Update error
         lastError = error;
-        error = armSensor.get_position() - targetPosition;
+        error = (armSensor.get_position() * -1) - targetPosition;
 
         // Debugging
-        pros::lcd::print(0, "Error: %d", error);
-        pros::lcd::print(1, "Speed: %d", speed);
+        pros::lcd::print(4, "Error: %d", error);
+        pros::lcd::print(5, "Speed: %d", speed);
 
         // Increment timeout
         timeout++;
@@ -66,7 +67,7 @@ int arm_control(int startingPosition, int targetPosition, double kP, double kI, 
         pros::lcd::print(5, "PID Timeout!");
     }
 
-    return armSensor.get_position();
+    return armSensor.get_position() * -1;
 }
 
 void intake_forward(){
@@ -152,32 +153,31 @@ void timeDrive(int time){
 5 for unflip */
 void ladyBrownControl(void* param) {
     int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 3000; //3100 //3000
-    int secondStopPosition = 10000;
-    int thirdStopPosition = 16500; // 15000
+
+    int firstStopPosition = 2100; //3100 //3000
+    int secondStopPosition = 6000; 
+    int thirdStopPosition = 14000; // 15000
     int fourthStopPostion = 18000; //18000
     int fifthStopPostion = 27000; //27000
     int sixthStopPosition = 2900; // 2800
     int lastStopPosition = 0;
 
     while (true) {
-        int currentRotationPosition = *rotationPositionPtr; // Dereference each loop
-        pros::lcd::print(5, "Position: %d", currentRotationPosition);
-        int currentPosition = armSensor.get_position();
+        int currentRotationPosition = *(int*)param; // Dereference each loop
+        pros::lcd::print(6, "current Position q: %d", currentRotationPosition);
 
-        if (currentRotationPosition == 0) {
-            currentPosition = arm_control(currentPosition, firstStopPosition, 0.022, 0.0, 0.02, 400);
-            ladyBrown.brake();
-            currentRotationPosition = 1;
-        } else if (currentRotationPosition == 1) {
-            currentPosition = arm_control(currentPosition, secondStopPosition, 0.018, 0.001, 0.04, 800);
+        int currentPosition = armSensor.get_position() * -1;
+        if (currentRotationPosition == 1) {
+            currentPosition = arm_control(currentPosition, firstStopPosition, 0.023, 0.01, 0.03,0);
         } else if (currentRotationPosition == 2) {
+            currentPosition = arm_control(currentPosition, secondStopPosition, 0.018, 0.001, 0.04, 800);
+        } else if (currentRotationPosition == 3) {
             currentPosition = arm_control(currentPosition, thirdStopPosition, 0.023, 0.0, 0.04, 1500);
         } else if (currentRotationPosition == 3) {
             currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 400);
             ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
             ladyBrown.brake();
-            *rotationPositionPtr = -1; // Update opcontrol's variable
+            //*rotationPositionPtr = -1; // Update opcontrol's variable
         }
         else if (currentRotationPosition == 4) {
             currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
@@ -189,54 +189,6 @@ void ladyBrownControl(void* param) {
         }
         else if (currentRotationPosition == 6) { // Y button
             currentPosition = arm_control(currentPosition, sixthStopPosition, 0.021, 0.0, 0.02, 400);
-            ladyBrown.brake();
-            //currentRotationPosition = 1;//1
-        }
-
-        pros::delay(20); // Prevent CPU hogging
-    }
-}
-
-
-void ladyBrownControl2(void* param) {//*****DO NOT REUSE ****************** */
-    int* rotationPositionPtr = static_cast<int*>(param);
-    int firstStopPosition = 0; //3100 //3000
-    int secondStopPosition = 7000;
-    int thirdStopPosition = 13500; // 15000
-    int fourthStopPostion = 15000; //18000
-    int fifthStopPostion = 24000; //27000
-    int sixthStopPosition = 0; // 2800
-    int lastStopPosition = -2800;
-
-    while (true) {
-        int currentRotationPosition = *rotationPositionPtr; // Dereference each loop
-        pros::lcd::print(5, "Position: %d", currentRotationPosition);
-        int currentPosition = armSensor.get_position();
-
-        if (currentRotationPosition == 0) {
-            currentPosition = arm_control(currentPosition, firstStopPosition, 0.025, 0.0, 0.02, 400);
-            ladyBrown.brake();
-            currentRotationPosition = 1;
-        } else if (currentRotationPosition == 1) {
-            currentPosition = arm_control(currentPosition, secondStopPosition, 0.018, 0.001, 0.04, 800);
-        } else if (currentRotationPosition == 2) {
-            currentPosition = arm_control(currentPosition, thirdStopPosition, 0.023, 0.0, 0.04, 1500);
-        } else if (currentRotationPosition == 3) {
-            currentPosition = arm_control(currentPosition, lastStopPosition, 0.02, 0.0, 0.02, 400);
-            ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-            ladyBrown.brake();
-            *rotationPositionPtr = -1; // Update opcontrol's variable
-        }
-        else if (currentRotationPosition == 4) {
-            currentPosition = arm_control(currentPosition, fourthStopPostion, 0.009, 0.0, 0.02, 1500);
-        }
-        else if (currentRotationPosition == 5) {
-            currentPosition = arm_control(currentPosition, fifthStopPostion, 0.009, 0.0, 0.02, 800);
-            ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-            ladyBrown.brake();
-        }
-        else if (currentRotationPosition == 6) { // Y button
-            currentPosition = arm_control(currentPosition, sixthStopPosition, 0.025, 0.0, 0.02, 400);
             ladyBrown.brake();
             //currentRotationPosition = 1;//1
         }

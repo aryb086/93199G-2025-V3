@@ -64,13 +64,6 @@ bool lastAState = false;
 
 // true for forward, false for backward
 
-// Lady Brown States and Stops
-double basePosition = 0;
-int firstStopPosition = 1450;
-int secondStopPosition = 6000;
-int thirdStopPosition = 14000;
-
-
 void intakeControl(bool dir){
         if(dir){
             back_intake.move(127);
@@ -217,7 +210,8 @@ void opcontrol() {
             else if (rotationPosition == 0 || rotationPosition == 6) {
                 pros::Task task1([&]() {
                     //ladyBrownGoToPosition(firstStopPosition, 50);
-                    ladyBrownGoToPositionPID(firstStopPosition, 0.035, 50);
+                    int firstStopPosition = 15; //1450
+                    ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
                 });
                 rotationPosition = 1;
             }
@@ -225,14 +219,16 @@ void opcontrol() {
                 rollbackAndStopIntake();
                 pros::Task task2([&]() {
                     //ladyBrownGoToPosition(secondStopPosition, 60);
-                    ladyBrownGoToPositionPID(secondStopPosition, 0.02, 100);
+                    int secondStopPosition = 60;
+                    ladyBrownGoToPositionPID(secondStopPosition, 3, 4);
                 });
                 rotationPosition = 2;
             }
             else if (rotationPosition == 2) {
                 pros::Task task3([&]() {
                     //ladyBrownGoToPosition(thirdStopPosition, 80);
-                    ladyBrownGoToPositionPID(thirdStopPosition, 0.02, 100);
+                    int thirdStopPosition = 140;
+                    ladyBrownGoToPositionPID(thirdStopPosition, 3, 4);
 
                 });
                 rotationPosition = 3;
@@ -257,7 +253,7 @@ void opcontrol() {
         }
 
         if(currentRightState && !lastRightState){
-            ladyBrownGoToBase(70);
+            ladyBrownGoToBase();
         }
 
         if(currentYState && !lastYState){
@@ -327,8 +323,8 @@ void ladyBrownGoToPosition(int targetPosition, int speed){
 }
 
 void ladyBrownGoToPositionPID(int targetPosition, double kp, int errorRange){
-    int currentPosition = armSensor.get_position() * -1;
-    int timeout = 2000; // 1000 milliseconds
+    int currentPosition = (armSensor.get_position() /100) * -1;
+    int timeout = 1000; // 1000 milliseconds
     uint32_t startTime = pros::millis(); // Get current time
     int error = targetPosition - currentPosition;
     while(abs(error) > errorRange && (pros::millis() - startTime) < timeout ){
@@ -339,36 +335,30 @@ void ladyBrownGoToPositionPID(int targetPosition, double kp, int errorRange){
 
         ladyBrown.move(speed);
         
-        currentPosition = armSensor.get_position() * -1;
+        currentPosition = (armSensor.get_position() / 100) * -1;
         pros::delay(20);
         error = targetPosition - currentPosition;
     }
-    // Brake the motor
-    ladyBrown.move(0);
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    ladyBrown.brake();
-    displayArmPosition();
+    brakeLadyBrown();
 }
 
-void ladyBrownGoToBase(int speed){
-    int currentPosition = armSensor.get_position() * -1;
+void ladyBrownGoToBase(){
+    double currentPosition = getCurrentPosition();
+    double kp = 0.8;
     int timeout = 1500; // 1000 milliseconds
     uint32_t startTime = pros::millis(); // Get current time
     while(currentPosition > 0 && (pros::millis() - startTime) < timeout ){
-        int speed = currentPosition * 0.01;
+        int speed = currentPosition * kp;
         if (speed > 127) speed = 127;
         if (speed < -127) speed = -127;
 
         if(speed > 0) speed = speed * -1;
 
         ladyBrown.move(speed);
-        currentPosition = armSensor.get_position() * -1;
+        currentPosition = getCurrentPosition();
         pros::delay(20);
     }
-    // Brake the motor
-    ladyBrown.move(0);
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    ladyBrown.brake();
+    brakeLadyBrown();
     //reset arm sensor
     armSensor.set_position(0);
     rotationPosition = 0;
@@ -384,5 +374,17 @@ void rollbackAndStopIntake(){
 }
 
 void displayArmPosition(){
-    pros::lcd::print(4, "Arm: %d", armSensor.get_position() * -1);
+    pros::lcd::print(4, "Arm: %d", (armSensor.get_position()/100));
+}
+
+double getCurrentPosition(){
+    return  (armSensor.get_position() / 100) * -1;
+}
+
+void brakeLadyBrown(){
+    // Brake the motor
+    ladyBrown.move(0);
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    ladyBrown.brake();
+    displayArmPosition();
 }

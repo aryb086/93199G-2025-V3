@@ -7,6 +7,7 @@
 
 int colorSelection = 0;
 int rotationPosition = 0;
+double basePositionDegrees = 0;
 std::string targetColor = "Red";
 
 void aliianceColor(){
@@ -99,7 +100,7 @@ void initialize() {
 	chassis.calibrate();
 	armSensor.reset_position();
 	ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-	basePosition = armSensor.get_position() / 100;
+	basePositionDegrees = armSensor.get_position() / 100;
 	Task colorSorting(colorSort, &targetColor, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Color Sort");
     //Task ladybrownTask(ladyBrownControl,  &rotationPosition, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Arm Control");
 

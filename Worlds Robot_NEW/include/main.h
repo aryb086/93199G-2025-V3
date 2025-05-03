@@ -77,10 +77,12 @@ void PID_tuning(void);
 int arm_control(int startingPosition, int targetPosition, double kP, double kI, double kD, int errorRange = 200);
 void ladyBrownControl(void* param);
 void ladyBrownGoToPosition(int targetPosition, int speed);
-void ladyBrownGoToBase(int speed);
+void ladyBrownGoToBase();
 void ladyBrownGoToPositionPID(int targetPosition, double kp, int errorRange);
 void rollbackAndStopIntake();
 void displayArmPosition();
+double getCurrentPosition();
+void brakeLadyBrown();
 
 void intake_forward(void);
 void intake_backward(void);
@@ -93,7 +95,7 @@ void clamp_control(void);
 void timeDrive(int time);
 
 extern int rotationPosition;
-extern double basePosition;
+extern double basePositionDegrees;
 
 extern std::string targetColor;
 #ifdef __cplusplus

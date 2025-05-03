@@ -98,6 +98,7 @@ void initialize() {
 	pros::lcd::initialize();
 	imu.reset(true);
 	chassis.calibrate();
+	chassis.setPose(0, 0, 0);
 	armSensor.reset_position();
 	ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	basePositionDegrees = armSensor.get_position() / 100;
@@ -107,9 +108,9 @@ void initialize() {
 	pros::Task screen_task([&]() {
         while (true) {
 			// print robot location to the brain screen
-			pros::lcd::print(0, "X: %d", chassis.getPose().x); // x
-			pros::lcd::print(1, "Y: %d", chassis.getPose().y); // y
-			pros::lcd::print(2, "Theta: %d", chassis.getPose().theta); // heading
+			pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+			pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+			pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
 			// delay to save resources
 			pros::delay(20);
         }

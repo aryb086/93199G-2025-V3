@@ -18,8 +18,8 @@ ADIDigitalOut doinker('G');
 // ADIDigitalOut doinker2('G');
 
 Imu imu(14);
-Rotation hTracking(8);
-Rotation vTracking(1);
+Rotation hTracking(5);
+Rotation vTracking(4);
 Rotation armSensor(17);
 Optical color(16);
 

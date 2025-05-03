@@ -62,6 +62,11 @@ bool intakePistonState = LOW;
 //color sort 
 bool lastAState = false;
 
+bool firstL2 = false; // Get ready to Load
+bool secondL2 = false; // Get Ready for Low Goal
+int L2States[3] = {0, 0, 0}; // 0 - Get ready to load ring, 1 - get ready for low goal, 2 - put low goal
+
+
 // true for forward, false for backward
 
 void intakeControl(bool dir){
@@ -203,14 +208,9 @@ void opcontrol() {
         //lady brown
         if (currentL1State && !lastL1State) {
             pros::lcd::print(5, "Rotational Position: %d", rotationPosition);
-
-            if (rotationPosition == -1) {
-                rotationPosition = 0;
-            }
-            else if (rotationPosition == 0 || rotationPosition == 6) {
+            if (rotationPosition == 0 || rotationPosition == 6) {
                 pros::Task task1([&]() {
-                    //ladyBrownGoToPosition(firstStopPosition, 50);
-                    int firstStopPosition = 15; //1450
+                    int firstStopPosition = 20; //1450
                     ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
                 });
                 rotationPosition = 1;
@@ -236,6 +236,7 @@ void opcontrol() {
         }
 
         if (currentL2State && !lastL2State) { 
+            /*
             if (rotationPosition == -1 || rotationPosition == 0 || rotationPosition == 6) {
                 front_intake.move(-80);
                 back_intake.move(-80);
@@ -249,6 +250,29 @@ void opcontrol() {
             }
             else if (rotationPosition == 5) {
                 rotationPosition = 3;
+            }
+            */
+            if(L2States[0] == 0){
+                pros::Task task1([&]() {
+                    int firstStopPosition = 20;
+                    ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
+                });
+                L2States[0] = 1;
+            }else if(L2States[1] == 0){
+                pros::Task task1([&]() {
+                    rollbackAndStopIntake();
+                    ladyBrownGoToPositionPID(140,2.5, 5);
+                });
+                L2States[1] = 1;
+            }else if(L2States[2] == 0){
+                pros::Task task1([&]() {
+                    ladyBrownGoToPositionPID(220,2.5, 5);
+                });
+                L2States[2] = 1;
+            }else {
+                pros::Task task1([&]() {
+                    ladyBrownGoToBase();
+                });
             }
         }
 
@@ -363,6 +387,7 @@ void ladyBrownGoToBase(){
     armSensor.set_position(0);
     rotationPosition = 0;
     displayArmPosition();
+    L2States[0] = 0, L2States[1] = 0, L2States[2] = 0;
 }
 
 void rollbackAndStopIntake(){

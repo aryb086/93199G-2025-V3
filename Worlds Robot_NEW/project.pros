@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Worlds",
+    "project_name": "Worlds Final",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -298,7 +298,7 @@
       }
     },
     "upload_options": {
-      "icon": "clawbot",
+      "icon": "ufo",
       "slot": 1
     },
     "use_early_access": false

@@ -97,11 +97,11 @@ void red_solo_awp(){
 }
 
 void blue_solo_awp(){
-    //armSensor.set_position(2950);
+    armSensor.set_position(2950);
     lcd::print(7, "Blue Solo AWP");
     targetColor = "Blue";
 
-    rotationPosition = 1;
+    rotationPosition = -1;
 
     chassis.setPose(61, 10, 145);
 
@@ -584,99 +584,6 @@ void blue_pos(){
 }
 
 void blue_neg(){
-    //************************************ */ NEED TO TEST ******************************************
-    lcd::print(7, "Blue Neg");
-    chassis.setPose(42, -21, 145);
-    targetColor = "Blue";
-    
-    armSensor.set_position(-1500);
-    ladyBrownGoToPositionPID(220,2.5, 5);
-
-    pros::delay(300);
-    
-    //clamping first mogo
-    
-    //chassis.turnToPoint(11.8,-12.2, 1000, {.forwards = false, .maxSpeed = 100}, false);
-    chassis.moveToPoint(4, -12.8, 1500, {.forwards = false, .maxSpeed = 80}, false);
-    pros::Task blueNeg([&]() {
-        ladyBrownGoToBase();
-    });
-    pros::delay(200);
-    clamp.set_value(HIGH);
-    pros::delay(300);
-    intake_forward();
-    chassis.turnToPoint(-17, 2, 500, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.moveToPoint(-17, 2, 1500, {.forwards = true, .maxSpeed = 90}, false);
-    chassis.moveToPoint(-17, 23.5, 1500, {.forwards = true, .maxSpeed = 80}, false);
-
-    chassis.turnToPoint(2.19, 13.65, 500, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.moveToPoint(2.19, 13.65, 1500, {.forwards = true, .maxSpeed = 90}, false);
-
-    chassis.turnToPoint(23.67, -27.5, 500, {.forwards = true, .maxSpeed = 100}, false);
-    intakePiston.set_value(HIGH);
-    chassis.moveToPoint(23.67, -27.5, 1500, {.forwards = true, .maxSpeed = 60}, false);
-    delay(200);
-    intakePiston.set_value(LOW);
-    delay(200);
-    //chassis.moveToPoint(23.67, -20.5, 1500, {.forwards = true, .maxSpeed = 60}, false);
-
-    chassis.moveToPoint(15.5, -13.5, 1500, {.forwards = false, .maxSpeed = 90}, false);
-
-    chassis.turnToPoint(7.0, -20.5, 500, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.moveToPoint(7.0, -20.5, 1000, {.forwards = true, .maxSpeed = 80}, false);
-
-    ladyBrownGoToPositionPID(170,2.5, 5);
-
-    /*
-    pros::delay(200);
-    clamp.set_value(HIGH);
-    pros::delay(50);
-    rotationPosition = 3;
-
-    //getting 1st and 2nd ring
-    chassis.moveToPoint(4,39, 1000, {.forwards = true, .maxSpeed = 80}, false);
-    // intake.move(127);
-    chassis.turnToPoint(3,75, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    pros::delay(200);
-    chassis.moveToPoint(3,62, 1000, {.forwards = true, .maxSpeed = 40}, false);
-    // chassis.moveToPoint(2,58, 1000, {.forwards = true, .maxSpeed = 40}, false);
-
-    //getting 3rd ring
-    chassis.turnToPoint(23,47, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.moveToPoint(30.094,40.753, 1000, {.forwards = true, .maxSpeed = 127}, false);
-
-    //getting 4th ring
-    chassis.turnToPoint(48,60, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    chassis.turnToPoint(9,9.5, 1000, {.forwards = false, .maxSpeed = 100}, false);
-    // intake.move(0);
-    chassis.moveToPoint(9,9.5, 1000, {.forwards = true, .maxSpeed = 127}, false);
-    doinker.set_value(HIGH);
-    pros::delay(300);
-    chassis.moveToPoint(30,30, 1000, {.forwards = false, .maxSpeed = 100}, false);
-    pros::delay(300);
-    doinker.set_value(LOW);
-    // intake.move(127);
-    chassis.moveToPoint(26,33, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    pros::delay(200);
-
-
-    //getting 5th ring
-    // intake.move(0);
-    chassis.moveToPoint(6,3.25, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    doinker.set_value(HIGH);
-    pros::delay(200);
-    chassis.moveToPoint(30,30, 1000, {.forwards = false, .maxSpeed = 127}, false);
-    // intake.move(127);
-
-
-    pros::delay(200);
-    doinker.set_value(LOW);
-    chassis.moveToPoint(11,12, 1000, {.forwards = true, .maxSpeed = 100}, false);
-    */
-
-}
-
-void blue_negOld(){
 
     //************************************ */ NEED TO TEST ******************************************
 
@@ -744,7 +651,6 @@ void blue_negOld(){
 
 
 }
-
 
 void skills1(){
     // skills

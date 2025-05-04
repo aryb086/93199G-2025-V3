@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lemlib/api.hpp"
+#include "pros/distance.hpp"
 #include "pros/imu.h"
 #include "pros/imu.hpp"
 #include "pros/motor_group.hpp"
@@ -25,3 +26,4 @@ extern Optical color;
 extern Rotation hTracking;
 extern Rotation vTracking;
 extern Imu imu;
+extern Distance distanceC;

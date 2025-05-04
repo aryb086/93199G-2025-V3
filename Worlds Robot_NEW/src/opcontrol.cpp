@@ -85,6 +85,7 @@ void opcontrol() {
     int colorPosition = 0;
     targetColor = "Blue";
     rotationPosition = 0;
+    ladyBrownGoToBase();
 
     while(true){
         //movement
@@ -119,21 +120,19 @@ void opcontrol() {
         bool intake_started = false;
 
         //color switcher
+        // In the button handling section of opcontrol()
         if (currentAState && !lastAState) { 
-            if (colorPosition == 0) {
+            if (targetColor == "Red") {
                 targetColor = "Blue";
-                colorPosition = 1;
             }
-            else if (colorPosition == 1) {
-                targetColor = "Red";
-                colorPosition = 2;
-            }
-            else if (colorPosition == 2) {
+            else if (targetColor == "Blue") {
                 targetColor = "None";
-                colorPosition = 0;
             }
+            else {
+                targetColor = "Red";
+            }
+            controller.print(1, 0, "Color: %s Clamp: %s", targetColor.c_str(), clampStateString.c_str());
         }
-
 
         
         if(currentR1State && !lastR1State){
@@ -205,20 +204,16 @@ void opcontrol() {
             }
         }
 
-        //lady brown
+        //lady brown - L1
         if (currentL1State && !lastL1State) {
             pros::lcd::print(5, "Rotational Position: %d", rotationPosition);
-            if (rotationPosition == 0 || rotationPosition == 6) {
-                pros::Task task1([&]() {
-                    int firstStopPosition = 20; //1450
-                    ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
-                });
+            if (rotationPosition == 0) {
+                goToFirstPosition();
                 rotationPosition = 1;
             }
             else if (rotationPosition == 1) {
                 rollbackAndStopIntake();
                 pros::Task task2([&]() {
-                    //ladyBrownGoToPosition(secondStopPosition, 60);
                     int secondStopPosition = 60;
                     ladyBrownGoToPositionPID(secondStopPosition, 3, 4);
                 });
@@ -226,37 +221,17 @@ void opcontrol() {
             }
             else if (rotationPosition == 2) {
                 pros::Task task3([&]() {
-                    //ladyBrownGoToPosition(thirdStopPosition, 80);
                     int thirdStopPosition = 140;
                     ladyBrownGoToPositionPID(thirdStopPosition, 3, 4);
-
                 });
                 rotationPosition = 3;
             }
         }
 
+        //lady brown - L2
         if (currentL2State && !lastL2State) { 
-            /*
-            if (rotationPosition == -1 || rotationPosition == 0 || rotationPosition == 6) {
-                front_intake.move(-80);
-                back_intake.move(-80);
-                pros::delay(25);
-                front_intake.move(-127);
-                back_intake.move(-127);                
-                rotationPosition = 4;
-            }
-            else if (rotationPosition == 4) {
-                rotationPosition = 5;
-            }
-            else if (rotationPosition == 5) {
-                rotationPosition = 3;
-            }
-            */
             if(L2States[0] == 0){
-                pros::Task task1([&]() {
-                    int firstStopPosition = 20;
-                    ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
-                });
+                goToFirstPosition();
                 L2States[0] = 1;
             }else if(L2States[1] == 0){
                 pros::Task task1([&]() {
@@ -277,7 +252,9 @@ void opcontrol() {
         }
 
         if(currentRightState && !lastRightState){
-            ladyBrownGoToBase();
+            pros::Task task1([&]() {
+                ladyBrownGoToBase();
+            });
         }
 
         if(currentYState && !lastYState){
@@ -369,7 +346,7 @@ void ladyBrownGoToPositionPID(int targetPosition, double kp, int errorRange){
 void ladyBrownGoToBase(){
     double currentPosition = getCurrentPosition();
     double kp = 0.8;
-    int timeout = 1500; // 1000 milliseconds
+    int timeout = 2000; // 1000 milliseconds
     uint32_t startTime = pros::millis(); // Get current time
     while(currentPosition > 0 && (pros::millis() - startTime) < timeout ){
         int speed = currentPosition * kp;
@@ -412,4 +389,11 @@ void brakeLadyBrown(){
     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     ladyBrown.brake();
     displayArmPosition();
+}
+
+void goToFirstPosition(){
+    pros::Task task1([&]() {
+        int firstStopPosition = 13;
+        ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
+    });
 }

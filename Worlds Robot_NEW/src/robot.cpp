@@ -3,6 +3,7 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/abstract_motor.hpp"
 #include "pros/adi.hpp"
+#include "pros/distance.hpp"
 #include "pros/optical.hpp"
 
 Controller controller(E_CONTROLLER_MASTER);
@@ -21,7 +22,8 @@ Imu imu(14);
 Rotation hTracking(5);
 Rotation vTracking(4);
 Rotation armSensor(17);
-Optical color(16);
+Optical color(13);
+Distance distanceC(16);
 
 lemlib::TrackingWheel horizontal_tracking_wheel(&hTracking, lemlib::Omniwheel::NEW_2, -3.5);
 lemlib::TrackingWheel vertical_tracking_wheel(&vTracking, lemlib::Omniwheel::NEW_2, 0.75);

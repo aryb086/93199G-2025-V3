@@ -83,6 +83,7 @@ void rollbackAndStopIntake();
 void displayArmPosition();
 double getCurrentPosition();
 void brakeLadyBrown();
+void goToFirstPosition();
 
 void intake_forward(void);
 void intake_backward(void);

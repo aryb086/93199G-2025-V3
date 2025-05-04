@@ -103,8 +103,8 @@ void intake_auton(bool dir, int time){
  */
 std::string detect_color(){
     double hue = color.get_hue();
-    double red = 20.0;
-    double blue = 185.0;
+    double red = 15.0;
+    double blue = 200.0;
     if(color.get_proximity() < 5){
         if(hue < red){
             return "Blue";
@@ -121,16 +121,16 @@ void colorSort(void* param){
         std::string targetColor = *static_cast<std::string*>(param);
         std::string currentColor = detect_color();
         if(currentColor == targetColor){
-            if(back_intake.get_target_velocity() > 0){
-                pros::delay(150);
+            if(distanceC.get() > 15 && distanceC.get() < 30 && distanceC.get() != 9999){
+                //ros::delay(10);
                 front_intake.move(0);
                 back_intake.move(0);
-                pros::delay(200);
+                pros::delay(500);
                 front_intake.move(127);
                 back_intake.move(127);
             }
         }
-        pros::delay(20);
+        pros::delay(10);
     }
     
 }

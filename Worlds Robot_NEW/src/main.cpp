@@ -1,7 +1,11 @@
 #include "main.h"
 #include "liblvgl/llemu.hpp"
 #include "pros/adi.h"
+#include "pros/colors.h"
+#include "pros/colors.hpp"
 #include "pros/llemu.hpp"
+#include "pros/screen.h"
+#include "pros/screen.hpp"
 #include "robot.h"
 #include "pros/misc.h"
 
@@ -13,25 +17,22 @@ std::string targetColor = "Red";
 void aliianceColor(){
 	static int pressed = 0;
 	if(pressed == 0) {
-		pros::lcd::clear_line(1);
-		pros::lcd::set_text(1, "--------------Color: Red------------");
-		//pros::lcd::print(4, "Color: %i", colorSelection);
+		pros::screen::set_pen(c::COLOR_RED); // Set pen color to red
+		pros::screen::print(pros::E_TEXT_MEDIUM,5, "----Color: Red--");
 		colorSelection = 1;
 		pressed += 1;
 		targetColor = "Red";
 	}
 	else if(pressed == 1){
-		pros::lcd::clear_line(1);
-		pros::lcd::set_text(1, "-----------Color: Blue-----------");
-		//pros::lcd::print(4, "Color: %i", colorSelection);
+		pros::screen::set_pen(c::COLOR_BLUE); // Set pen color to red
+		pros::screen::print(pros::E_TEXT_MEDIUM,5, "----Color: Blue--");
 		colorSelection = 2;
 		pressed += 1;
 		targetColor = "Blue";
 	}
 	else{
-		pros::lcd::clear_line(1);
-		pros::lcd::set_text(1, "---------------Skills---------------");
-		//pros::lcd::print(4, "Color: %i", colorSelection);
+		pros::screen::set_pen(c::COLOR_CYAN); // Set pen color to red
+		pros::screen::print(pros::E_TEXT_MEDIUM,5, "**** SKILLS *** ");
 		pressed = 0;
 		colorSelection = 0;
 		targetColor = "Red";
@@ -44,22 +45,17 @@ int negPositiveSelection = 0;
 void negPos(){
 	static int pressed = 0;
 	if(pressed == 0) {
-		pros::lcd::clear_line(2);
-		pros::lcd::set_text(2, "--------------Negative--------------");
-		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
+		pros::lcd::set_text(5, "--------------Negative--------------");
 		negPositiveSelection = 1;
 		pressed += 1;
 	}
 	else if(pressed == 1){
-		pros::lcd::clear_line(2);
-		pros::lcd::set_text(2, "---------------Postive--------------");
-		//pros::lcd::print(5, "NegPos: %i", negPositiveSelection);
+		pros::lcd::set_text(5, "---------------Postive--------------");
 		pressed += 1;
 		negPositiveSelection = 2;
 	}
 	else{
-		pros::lcd::clear_line(2);
-		pros::lcd::set_text(2, "--------------Solo AWP--------------");
+		pros::lcd::set_text(5, "--------------Solo AWP--------------");
 		negPositiveSelection = 0;
 		pressed = 0;
 	}
@@ -98,7 +94,8 @@ void initialize() {
 	pros::lcd::initialize();
 	imu.reset(true);
 	chassis.calibrate();
-	chassis.setPose(0, 0, 0);
+	//chassis.setPose(0, 0, 0);
+	chassis.setPose(42, -21, 145);
 	armSensor.reset_position();
 	ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	basePositionDegrees = armSensor.get_position() / 100;
@@ -111,11 +108,11 @@ void initialize() {
 			pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
 			pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
 			pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+			pros::lcd::print(3, "Target Color: %s", targetColor); // heading
 			// delay to save resources
 			pros::delay(20);
         }
     });
-	// blue_pos();
 }
 
 /**
@@ -159,6 +156,8 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+	blue_neg();
+	/*
 	if(colorSelection == 1){
 		if(negPositiveSelection == 1){
 			red_pos();
@@ -182,7 +181,8 @@ void autonomous() {
 		}
 	}
 	else{
-		blue_pos();
+		skills();
 	}
+		*/
 }
 

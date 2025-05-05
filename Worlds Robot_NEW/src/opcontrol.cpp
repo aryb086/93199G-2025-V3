@@ -393,7 +393,7 @@ void brakeLadyBrown(){
 
 void goToFirstPosition(){
     pros::Task task1([&]() {
-        int firstStopPosition = 13;
+        int firstStopPosition = 12;
         ladyBrownGoToPositionPID(firstStopPosition, 2.5, 2);
     });
 }

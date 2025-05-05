@@ -94,8 +94,8 @@ void initialize() {
 	pros::lcd::initialize();
 	imu.reset(true);
 	chassis.calibrate();
-	//chassis.setPose(0, 0, 0);
-	chassis.setPose(42, -21, 145);
+	chassis.setPose(42, -21, 35);
+	//chassis.setPose(42, -21, 145);
 	armSensor.reset_position();
 	ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	basePositionDegrees = armSensor.get_position() / 100;
@@ -156,7 +156,7 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
-	blue_neg();
+	red_solo_awp();
 	/*
 	if(colorSelection == 1){
 		if(negPositiveSelection == 1){
